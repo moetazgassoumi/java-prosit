@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.educonnect.educonnect.Controllers.SignupController"
+            prefWidth="800" prefHeight="700">
+
+    <ScrollPane fitToWidth="true" prefHeight="700.0" prefWidth="800.0">
+        <VBox alignment="TOP_CENTER" spacing="15" >
+        <Label text="Inscription" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" />
+                    <ColumnConstraints hgrow="ALWAYS" />
+                </columnConstraints>
+
+                <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                <Label text="Prénom :" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <TextField fx:id="prenomField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                <Label text="CIN :" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <TextField fx:id="cinField" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                <Label text="Téléphone :" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <TextField fx:id="telephoneField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                <Label text="Email :" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                <TextField fx:id="emailField" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+
+                <Label text="Mot de passe :" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                <PasswordField fx:id="passwordField" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+
+                <TextField fx:id="visiblePasswordField" GridPane.rowIndex="5" GridPane.columnIndex="1" visible="false" managed="false" />
+
+                <CheckBox fx:id="showPasswordCheckBox" text="Afficher le mot de passe" onAction="#togglePasswordVisibility"
+                          GridPane.rowIndex="6" GridPane.columnIndex="1" />
+
+                <Label text="Confirmation mot de passe :" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                <PasswordField fx:id="confirmPasswordField" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+
+                <Label text="Force du mot de passe :" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+                <ProgressBar fx:id="passwordStrengthBar" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+                <Label fx:id="passwordStrengthLabel" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+
+                <Label text="Date de naissance :" GridPane.rowIndex="10" GridPane.columnIndex="0" />
+                <DatePicker fx:id="dateNssPicker" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+
+                <Label text="Lieu :" GridPane.rowIndex="11" GridPane.columnIndex="0" />
+                <TextField fx:id="lieuField" GridPane.rowIndex="11" GridPane.columnIndex="1" />
+
+                <Label text="Adresse :" GridPane.rowIndex="12" GridPane.columnIndex="0" />
+                <TextField fx:id="adresseField" GridPane.rowIndex="12" GridPane.columnIndex="1" />
+
+                <Label text="Rôle :" GridPane.rowIndex="13" GridPane.columnIndex="0" />
+                <ComboBox fx:id="roleComboBox" GridPane.rowIndex="13" GridPane.columnIndex="1" />
+
+                <Label text="Spécialité :" GridPane.rowIndex="14" GridPane.columnIndex="0" />
+                <TextField fx:id="specialiteField" GridPane.rowIndex="14" GridPane.columnIndex="1" />
+
+                <Label text="Salaire :" GridPane.rowIndex="15" GridPane.columnIndex="0" />
+                <TextField fx:id="salaireField" GridPane.rowIndex="15" GridPane.columnIndex="1" />
+
+                <Label text="Photo :" GridPane.rowIndex="16" GridPane.columnIndex="0" />
+                <HBox spacing="5" GridPane.rowIndex="16" GridPane.columnIndex="1">
+                    <TextField fx:id="photoField" HBox.hgrow="ALWAYS"/>
+                    <Button text="Parcourir" onAction="#handlePhotoBrowse" />
+                </HBox>
+
+                <Button text="S'inscrire" onAction="#handleSignup" GridPane.rowIndex="17" GridPane.columnIndex="1" />
+
+                <Label fx:id="messageLabel" GridPane.rowIndex="18" GridPane.columnIndex="1" style="-fx-text-fill: red;" wrapText="true"/>
+            </GridPane>
+        </VBox>
+    </ScrollPane>
+</AnchorPane>
