@@ -189,4 +189,31 @@ public class UserRepository implements EntityCrud<User> {
         return null;
     }
 
+    public User getUserByEmail(String email) {
+        String query = "SELECT * FROM user WHERE email = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setNom(rs.getString("nom"));
+                    user.setPrenom(rs.getString("prenom"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(UserRole.valueOf(rs.getString("role")));
+                    user.setTelephone(rs.getInt("telephone"));
+                    user.setDateNss(rs.getDate("dateNess"));
+                    user.setLieu(rs.getString("lieu"));
+                    user.setAdresse(rs.getString("adresse"));
+                    user.setPhotoUrl(rs.getString("photo"));
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to retrieve user by email", e);
+        }
+
+        return null; // Return null if the user is not found
+    }
 }

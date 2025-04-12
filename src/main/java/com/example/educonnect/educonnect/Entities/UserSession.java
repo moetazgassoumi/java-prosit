@@ -29,4 +29,39 @@ public class UserSession {
         ApplicationContext.getInstance().setUserSession(instance);
         return instance;
     }
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+
+
+    public void cleanUserSession() {
+        userId = 0;
+        userName = "";
+        prenom = "";
+        role = null;
+
+    }
+
+    @Override
+    public String toString() {
+        return "UserSession{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }

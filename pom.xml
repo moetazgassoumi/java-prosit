@@ -113,6 +113,11 @@
       <artifactId>materialfx</artifactId>
       <version>11.13.10</version>  <!-- Vérifiez la version la plus récente -->
     </dependency>
+    <dependency>
+      <groupId>com.example.educonnect</groupId>
+      <artifactId>educonnect</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>

@@ -10,8 +10,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/educonnect/educonnect/Views/sign-up.fxml"));
-        primaryStage.setTitle("Formulaire d'inscription");
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/educonnect/educonnect/Views/MainLoginSignUp.fxml"));
+        primaryStage.setTitle("Bienvenue sur EduConnect");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
