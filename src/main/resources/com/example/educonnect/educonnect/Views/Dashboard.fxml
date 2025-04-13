@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.educonnect.educonnect.Views.Dashboard"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.educonnect.educonnect.Controllers.DashboardController"
+            prefWidth="1000" prefHeight="700">
 
+    <children>
+        <VBox spacing="15" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+            <Label text="Tableau de bord des utilisateurs" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10">
+                <Label text="Filtrer par rôle : " />
+                <ComboBox fx:id="roleFilterComboBox" prefWidth="200"/>
+            </HBox>
+
+            <AnchorPane fx:id="contentPane" prefHeight="600" prefWidth="960" style="-fx-background-color: #F0F0F0; -fx-border-color: #ccc; -fx-border-width: 1;">
+                <!-- Le tableau sera chargé ici dynamiquement -->
+            </AnchorPane>
+        </VBox>
+    </children>
 </AnchorPane>

@@ -29,31 +29,46 @@ public class UserRepository implements EntityCrud<User> {
             return 0;
         }
     }
-    public List <User> getUsersByRole(String role) throws SQLException{
+    public List<User> getUsersByRole(String role) throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM user WHERE role = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, role);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            User user = new User();
-            user.setId(rs.getInt("id"));
-            user.setCIN(rs.getInt("CIN"));
-            user.setNom(rs.getString("nom"));
-            user.setPrenom(rs.getString("prenom"));
-            user.setEmail(rs.getString("email"));
-            user.setTelephone(rs.getInt("telephone"));
-            user.setLieu(rs.getString("lieu"));
-            user.setAdresse(rs.getString("adresse"));
-            user.setDateNss(rs.getDate("dateNss"));
-            user.setStatus(rs.getString("status"));
-            user.setSpecialite(rs.getString("specialite"));
-            user.setPhotoUrl(rs.getString("photoUrl"));
-            users.add(user);
+        String query;
 
+        if (UserRole.valueOf(role) == UserRole.FORMATEUR) {
+            query = "SELECT id, nom, prenom, CIN, telephone, email, dateNss, lieu, adresse, role, salaire, specialite, photoUrl FROM user WHERE role = ?";
+        } else {
+            query = "SELECT id, nom, prenom, CIN, telephone, email, dateNss, lieu, adresse, role, photoUrl FROM user WHERE role = ?";
         }
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, role);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setNom(rs.getString("nom"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setCIN(rs.getInt("CIN"));
+                user.setTelephone(rs.getInt("telephone"));
+                user.setEmail(rs.getString("email"));
+                user.setDateNss(rs.getDate("dateNss"));
+                user.setLieu(rs.getString("lieu"));
+                user.setAdresse(rs.getString("adresse"));
+                user.setRole(UserRole.valueOf(role));
+                user.setPhotoUrl(rs.getString("photoUrl"));
+
+                // Si formateur, on ajoute les colonnes supplémentaires
+                if (UserRole.valueOf(role) == UserRole.FORMATEUR) {
+                    user.setSalaire(rs.getFloat("salaire"));
+                    user.setSpecialite(rs.getString("specialite"));
+                }
+
+                users.add(user);
+            }
+        }
+
         return users;
     }
+
     @Override
     //create
     public void addEntity(User user) throws DatabaseException {
@@ -216,4 +231,24 @@ public class UserRepository implements EntityCrud<User> {
 
         return null; // Return null if the user is not found
     }
+    public void updateEmailPhoneAndImage(User u) {
+        String query = "UPDATE user SET email = ?, telephone = ?, photoUrl = ? WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, u.getEmail());
+            preparedStatement.setInt(2, u.getTelephone());
+            preparedStatement.setString(3, u.getPhotoUrl());
+            preparedStatement.setInt(4, u.getId());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User email, phone, and image updated successfully");
+            } else {
+                System.out.println("User not found");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating user: " + e.getMessage());
+        }
+    }
+
 }
