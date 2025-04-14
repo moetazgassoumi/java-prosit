@@ -218,10 +218,11 @@ public class UserRepository implements EntityCrud<User> {
                     user.setEmail(rs.getString("email"));
                     user.setRole(UserRole.valueOf(rs.getString("role")));
                     user.setTelephone(rs.getInt("telephone"));
-                    user.setDateNss(rs.getDate("dateNess"));
+                    user.setDateNss(rs.getDate("dateNss"));
                     user.setLieu(rs.getString("lieu"));
                     user.setAdresse(rs.getString("adresse"));
-                    user.setPhotoUrl(rs.getString("photo"));
+                    user.setPhotoUrl(rs.getString("photoUrl")); // ✅ Supposons que le champ en base est 'photoUrl'
+
                     return user;
                 }
             }
@@ -249,6 +250,61 @@ public class UserRepository implements EntityCrud<User> {
         } catch (SQLException e) {
             System.err.println("Error updating user: " + e.getMessage());
         }
+    }
+    public User getUserById(int id) {
+        String query = "SELECT * FROM user WHERE id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    User user = new User();
+                    user.setId(resultSet.getInt("id"));
+                    user.setCIN(resultSet.getInt("CIN"));
+                    user.setNom(resultSet.getString("nom"));
+                    user.setPrenom(resultSet.getString("prenom"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setRole(UserRole.valueOf(resultSet.getString("role")));
+                    user.setTelephone(resultSet.getInt("telephone"));
+                    user.setDateNss(resultSet.getDate("DateNss"));
+                    user.setLieu(resultSet.getString("lieu"));
+                    user.setAdresse(resultSet.getString("adresse"));
+                    user.setPhotoUrl(resultSet.getString("photoUrl")); // ✅ champ correct
+                    return user;
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return null;
+    }
+    public User getUserByName(String userName) {
+        String query = "SELECT * FROM user WHERE nom = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, userName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setCIN(rs.getInt("CIN"));
+                    user.setNom(rs.getString("nom"));
+                    user.setPrenom(rs.getString("prenom"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(UserRole.valueOf(rs.getString("role")));
+                    user.setTelephone(rs.getInt("telephone"));
+                    user.setDateNss(rs.getDate("DateNss"));
+                    user.setLieu(rs.getString("lieu"));
+                    user.setAdresse(rs.getString("adresse"));
+                    user.setPhotoUrl(rs.getString("photoUrl")); // ✅ champ correct
+
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to retrieve user by name", e);
+        }
+
+        return null; // Return null if the user is not found
     }
 
 }
