@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.esprit.Controllers.Mayssa.MainController">
+    <top>
+        <HBox alignment="CENTER" style="-fx-background-color: #2c3e50; -fx-padding: 10;">
+            <Text fill="WHITE" text="Gestion des Cours et Catégories" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            <Tab fx:id="frontTab" text="Accueil">
+                <fx:include fx:id="frontContent" source="front_view.fxml"/>
+            </Tab>
+            <Tab fx:id="coursTab" text="Cours">
+                <fx:include fx:id="coursContent" source="cours_view.fxml"/>
+            </Tab>
+            <Tab fx:id="categoriesTab" text="Catégories">
+                <fx:include fx:id="categoriesContent" source="categorie_view.fxml"/>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

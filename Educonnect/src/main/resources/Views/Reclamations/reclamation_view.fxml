@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.esprit.Controllers.Aziz.ReclamationController"
+      spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Gestion des Réclamations" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+
+    <Label text="Liste des Réclamations" style="-fx-font-weight: bold;"/>
+    <ListView fx:id="reclamationsList" prefHeight="200"/>
+
+    <Label text="Modifier la réclamation sélectionnée" style="-fx-font-weight: bold;"/>
+    <TextArea fx:id="messageField" promptText="Modifiez le texte de la réclamation..."/>
+    <HBox spacing="10">
+        <Button text="Modifier" onAction="#handleUpdateReclamation"/>
+        <Button text="Supprimer" onAction="#handleDeleteReclamation"/>
+    </HBox>
+
+    <Separator/>
+
+    <Label text="Réponses pour cette réclamation" style="-fx-font-weight: bold;"/>
+    <ListView fx:id="reponsesList" prefHeight="150"/>
+
+    <Label text="Ajouter une réponse" style="-fx-font-weight: bold;"/>
+    <TextArea fx:id="reponseField" promptText="Entrez votre réponse..."/>
+    <Button text="Ajouter Réponse" onAction="#handleAddReponse"/>
+</VBox>

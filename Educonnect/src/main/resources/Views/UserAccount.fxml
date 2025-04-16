@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import io.github.palexdev.materialfx.dialogs.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.esprit.Controllers.UseraccountController"
+            prefHeight="800.0" prefWidth="1300.0">
+
+    <children>
+        <!-- Barre latérale -->
+        <VBox layoutX="0.0" layoutY="0.0" prefWidth="200" style="-fx-background-color: #f0f0f0;">
+            <children>
+                <Button fx:id="Home_Btn" text="Home" prefWidth="200"/>
+                <Button fx:id="Users_Btn" text="Users" prefWidth="200"/>
+                <Button fx:id="Reclamations_Btn" text="Reclamations" prefWidth="200"/>
+                <Button fx:id="Events_Btn" text="Events" prefWidth="200"/>
+                <Button fx:id="Logout_Btn" text="Logout" prefWidth="200" onAction="#onLogoutButtonClick"/>
+            </children>
+        </VBox>
+
+        <!-- Pane principal -->
+        <Pane fx:id="general_pane" layoutX="200.0" layoutY="0.0" prefHeight="800" prefWidth="1100">
+            <children>
+
+                <Label fx:id="user_name" layoutX="50.0" layoutY="30.0" text="Bienvenue, User Name" style="-fx-font-size: 24px;"/>
+
+                <Label layoutX="50.0" layoutY="100.0" text="Email:"/>
+                <MFXTextField fx:id="tf_UserAccountEmail" layoutX="150.0" layoutY="95.0" prefWidth="300"/>
+
+                <Label layoutX="50.0" layoutY="160.0" text="Téléphone:"/>
+                <MFXTextField fx:id="tf_UserAccountNumero" layoutX="150.0" layoutY="155.0" prefWidth="300"/>
+
+                <ImageView fx:id="ImageviewUser" layoutX="50.0" layoutY="220.0" fitHeight="100" fitWidth="100"/>
+
+                <MFXButton fx:id="UpdatePassword_User" layoutX="200.0" layoutY="230.0" text="Modifier le mot de passe" onAction="#afficherUpdate"/>
+                <MFXButton fx:id="ConfirmerD0_AccountUser1" layoutX="200.0" layoutY="280.0" text="Supprimer le compte" onAction="#afficherDeleteDialog"/>
+
+                <Label layoutX="50.0" layoutY="350.0" text="Modifier le chemin de l'image"/>
+                <TextField fx:id="photoField" layoutX="250.0" layoutY="345.0" prefWidth="200"/>
+                <MFXButton fx:id="ChangeImageBtn" layoutX="470.0" layoutY="345.0" text="Parcourir" onAction="#changeImage"/>
+
+                <MFXButton fx:id="Update_AccountUser" layoutX="250.0" layoutY="390.0" text="Mettre à jour" onAction="#updateUser"/>
+                <MFXButton fx:id="Confirmer_AccountUser" layoutX="250.0" layoutY="430.0" text="Confirmer" onAction="#updateUser"/>
+
+                <!-- Dialog: Confirmation de suppression -->
+                <MFXGenericDialog fx:id="DialogConfirm_Delete" visible="false" layoutX="300" layoutY="500" prefWidth="500">
+                    <content>
+                        <VBox spacing="10" alignment="CENTER">
+                            <Label text="Voulez-vous vraiment supprimer ce compte ?"/>
+                            <HBox spacing="20" alignment="CENTER">
+                                <MFXButton fx:id="AnnulerDelete1_User" text="Annuler" onAction="#closeDeleteD"/>
+                                <MFXButton fx:id="ConfirmDelete1_User" text="Confirmer" onAction="#deleteUser"/>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </MFXGenericDialog>
+
+                <!-- Dialog: Modifier mot de passe -->
+                <MFXGenericDialog fx:id="Dialog_UpdatePassword_User" visible="false" layoutX="300" layoutY="500" prefWidth="500">
+                    <content>
+                        <VBox spacing="10" alignment="CENTER">
+                            <MFXTextField fx:id="tf_UserOldPassword" promptText="Ancien mot de passe"/>
+                            <MFXTextField fx:id="tf_UserNewPassword" promptText="Nouveau mot de passe"/>
+                            <HBox spacing="20" alignment="CENTER">
+                                <MFXButton fx:id="AnnulerUpdateP_User" text="Annuler" onAction="#ondialogueupdatebtnClick"/>
+                                <MFXButton fx:id="UpdatePassword_ConfirmDialog" text="Confirmer" onAction="#UpdatePassword"/>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </MFXGenericDialog>
+
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

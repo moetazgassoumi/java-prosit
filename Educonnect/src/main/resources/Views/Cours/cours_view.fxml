@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.esprit.Controllers.Mayssa.CoursController">
+    <top>
+        <HBox alignment="CENTER" style="-fx-background-color: #2c3e50; -fx-padding: 10;">
+            <Text fill="WHITE" text="Gestion des Cours" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <GridPane hgap="10" vgap="10">
+                <Label text="Titre:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="titreField" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+
+                <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextArea fx:id="descriptionArea" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="2"/>
+
+                <Label text="Contenu:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextArea fx:id="contenuArea" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.columnSpan="2"/>
+
+                <Label text="Catégorie:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <ComboBox fx:id="categorieCombo" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+
+                <Label text="Image:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <TextField fx:id="imagePathField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Button fx:id="uploadButton" text="Parcourir" onAction="#handleUpload" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+
+                <ImageView fx:id="imagePreview" fitWidth="150" fitHeight="150" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                    <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave"/>
+                    <Button fx:id="updateButton" text="Modifier" onAction="#handleUpdate"/>
+                    <Button fx:id="deleteButton" text="Supprimer" onAction="#handleDelete"/>
+                    <Button fx:id="clearButton" text="Vider" onAction="#handleClear"/>
+                </HBox>
+            </GridPane>
+
+            <TableView fx:id="coursTable">
+                <columns>
+                    <TableColumn fx:id="titreColumn" text="Titre"/>
+                    <TableColumn fx:id="descriptionColumn" text="Description"/>
+                    <TableColumn fx:id="contenuColumn" text="Contenu"/>
+                    <TableColumn fx:id="categorieColumn" text="Catégorie"/>
+                    <TableColumn fx:id="imageColumn" text="Image"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

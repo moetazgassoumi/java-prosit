@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.esprit.Controllers.Aziz.FrontController"
+      spacing="20" style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+    <stylesheets>
+        <URL value="@../../styles/stylesreclamation.css" />
+    </stylesheets>
+    <HBox alignment="CENTER_RIGHT">
+        <Button fx:id="addReclamationBtn" text="Create New Reclamation"
+                styleClass="add-btn"/>
+    </HBox>
+
+    <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+        <VBox fx:id="reclamationsContainer" spacing="15"/>
+    </ScrollPane>
+</VBox>

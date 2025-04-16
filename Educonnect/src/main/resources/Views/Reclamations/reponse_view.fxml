@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.esprit.Controllers.Aziz.ReponseController"
+      spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Liste des Réponses" style="-fx-font-weight: bold;"/>
+    <ListView fx:id="reponsesList" prefHeight="300"/>
+
+    <Separator/>
+
+    <Label text="Nouvelle Réponse" style="-fx-font-weight: bold;"/>
+    <TextArea fx:id="reponseField" promptText="Entrez votre réponse..."/>
+    <HBox spacing="10">
+        <Button text="Ajouter" onAction="#handleAddReponse"/>
+        <Button text="Modifier" onAction="#handleUpdateReponse"/>
+        <Button text="Supprimer" onAction="#handleDeleteReponse"/>
+    </HBox>
+</VBox>

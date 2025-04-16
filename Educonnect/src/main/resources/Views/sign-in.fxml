@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.esprit.Controllers.LoginController"
+            prefWidth="1200" prefHeight="1000">
+
+    <VBox alignment="CENTER" spacing="15.0" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20" >
+        <Label text="Connexion" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <GridPane hgap="10" vgap="10" >
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Email :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="ck_emailField" promptText="Entrez votre email" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Mot de passe :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="ck_passwordField" promptText="Entrez votre mot de passe" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Button fx:id="signIn_btn" text="Se connecter" maxWidth="150"/>
+    </VBox>
+
+</AnchorPane>

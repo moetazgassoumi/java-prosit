@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.esprit.Controllers.Karim.MainController">
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Exit" onAction="#handleExit"/>
+            </Menu>
+            <Menu text="Management">
+                <MenuItem text="Events" onAction="#showEventManagement"/>
+                <MenuItem text="Categories" onAction="#showCategoryManagement"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <center>
+        <TabPane fx:id="mainTabPane">
+            <Tab text="Events">
+                <SplitPane dividerPositions="0.4">
+                    <items>
+                        <VBox>
+                            <fx:include source="event_view.fxml"/>
+                        </VBox>
+                    </items>
+                </SplitPane>
+            </Tab>
+            <Tab text="Categories">
+                <SplitPane dividerPositions="0.4">
+                    <items>
+
+                        <VBox>
+                            <fx:include source="category_view.fxml"/>
+                        </VBox>
+                    </items>
+                </SplitPane>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

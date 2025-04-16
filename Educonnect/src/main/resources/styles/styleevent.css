@@ -1,0 +1,113 @@
+/* Base Styles */
+.root {
+    -fx-font-family: 'Segoe UI', Roboto, sans-serif;
+    -fx-background-color: #f8f9fa;
+}
+
+/* Header Styles */
+.header-box {
+    -fx-background-color: #2c3e50;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+/* Scroll Pane */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+    -fx-fit-to-width: true;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Events Container */
+.events-container {
+    -fx-padding: 20px;
+    -fx-hgap: 25px;
+    -fx-vgap: 25px;
+    -fx-alignment: center;
+}
+
+/* Event Card */
+.event-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-alignment: top-center;
+    -fx-pref-width: 300px;
+    -fx-max-width: 300px;
+    -fx-cursor: hand;
+}
+
+.event-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 3);
+    -fx-translate-y: -5px;
+    -fx-background-color: #f5f7fa;
+}
+
+/* Card Elements */
+.event-card .image-view {
+    -fx-fit-width: 270px;
+    -fx-fit-height: 180px;
+    -fx-background-radius: 5px 5px 0 0;
+}
+
+.event-title {
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+    -fx-max-width: 270px;
+}
+
+.event-datetime {
+    -fx-text-fill: #3498db;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.event-location {
+    -fx-text-fill: #7f8c8d;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.event-category {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.event-description {
+    -fx-fill: #34495e;
+    -fx-font-size: 13px;
+    -fx-wrapping-width: 270px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .events-container {
+        -fx-hgap: 15px;
+        -fx-vgap: 15px;
+    }
+
+    .event-card {
+        -fx-pref-width: 280px;
+        -fx-max-width: 280px;
+    }
+
+    .event-card .image-view {
+        -fx-fit-width: 250px;
+    }
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.esprit.Controllers.MainLoginSignUpController"
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: #f2f2f2;">
+
+    <Pane prefHeight="600.0" prefWidth="800.0">
+        <children>
+            <!-- Zone de transition -->
+            <VBox fx:id="vbox" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="800.0">
+                <!-- Le contenu (sign-in ou sign-up) sera chargé dynamiquement ici -->
+            </VBox>
+
+            <!-- Boutons pour changer entre SignIn et SignUp -->
+            <HBox spacing="10" alignment="CENTER" layoutX="0.0" layoutY="560.0" prefWidth="800.0"
+                  AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="20">
+                <Button text="Se connecter"
+                        onAction="#open_signin"
+                        style="-fx-background-color: #0C162C; -fx-text-fill: white; -fx-font-weight: bold;" />
+                <Button text="S'inscrire"
+                        onAction="#open_signup"
+                        style="-fx-background-color: #005c8a; -fx-text-fill: white; -fx-font-weight: bold;" />
+            </HBox>
+        </children>
+    </Pane>
+</AnchorPane>

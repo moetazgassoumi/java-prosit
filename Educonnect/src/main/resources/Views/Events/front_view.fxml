@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.esprit.Controllers.Karim.FrontController"
+            >
+    <stylesheets>
+        <URL value="@../../styles/styleevent.css" />
+    </stylesheets>
+
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="header-box">
+            <Button text="← Back to Home" styleClass="back-button" onAction="#goToHome"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Upcoming Events" styleClass="header-title"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fx:id="scrollPane" styleClass="scroll-pane">
+            <FlowPane fx:id="coursesContainer" styleClass="events-container"/>
+        </ScrollPane>
+    </center>
+</BorderPane>

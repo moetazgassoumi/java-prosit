@@ -1,0 +1,337 @@
+package com.esprit.Repository;
+
+import com.esprit.Entities.User;
+import com.esprit.Entities.UserRole;
+import com.esprit.exceptions.DatabaseException;
+import com.esprit.Interfaces.EntityCrud;
+import com.esprit.Connexion.DatabaseConnection;
+import java.security.NoSuchAlgorithmException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.esprit.Repository.AuthRepository.hashPassword2;
+
+public class UserRepository implements EntityCrud<User> {
+    private final Connection conn = DatabaseConnection.getConnection();
+
+    public int countusers() throws SQLException {
+        String query = "SELECT COUNT(*) FROM user";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ResultSet resultSet = ps.executeQuery();
+        if (resultSet.next()){
+            return resultSet.getInt("COUNT");
+        }else {
+            return 0;
+        }
+    }
+    public List<User> getUsersByRole(String role) throws SQLException {
+        List<User> users = new ArrayList<>();
+        String query;
+
+        if (UserRole.valueOf(role) == UserRole.FORMATEUR) {
+            query = "SELECT id, nom, prenom, CIN, telephone, email, dateNss, lieu, adresse, role, salaire, specialite, photoUrl FROM user WHERE role = ?";
+        } else {
+            query = "SELECT id, nom, prenom, CIN, telephone, email, dateNss, lieu, adresse, role, photoUrl FROM user WHERE role = ?";
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, role);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setNom(rs.getString("nom"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setCIN(rs.getInt("CIN"));
+                user.setTelephone(rs.getInt("telephone"));
+                user.setEmail(rs.getString("email"));
+                user.setDateNss(rs.getDate("dateNss"));
+                user.setLieu(rs.getString("lieu"));
+                user.setAdresse(rs.getString("adresse"));
+                user.setRole(UserRole.valueOf(role));
+                user.setPhotoUrl(rs.getString("photoUrl"));
+
+                // Si formateur, on ajoute les colonnes supplémentaires
+                if (UserRole.valueOf(role) == UserRole.FORMATEUR) {
+                    user.setSalaire(rs.getFloat("salaire"));
+                    user.setSpecialite(rs.getString("specialite"));
+                }
+
+                users.add(user);
+            }
+        }
+
+        return users;
+    }
+
+    @Override
+    //create
+    public void addEntity(User user) throws DatabaseException {
+        String sql;
+        if (user.getRole() == UserRole.FORMATEUR) {
+            sql = "INSERT INTO user (nom, prenom, CIN, telephone, email, password, dateNss, lieu, adresse, role, salaire, specialite, photoUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        } else {
+            sql = "INSERT INTO user (nom, prenom, CIN, telephone, email, password, dateNss, lieu, adresse, role, photoUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        }
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, user.getNom());
+            pstmt.setString(2, user.getPrenom());
+            pstmt.setInt(3, user.getCIN());
+            pstmt.setInt(4, user.getTelephone());
+            pstmt.setString(5, user.getEmail());
+            pstmt.setString(6, hashPassword2(user.getPassword())); // Hash du mot de passe
+            pstmt.setDate(7, new Date(user.getDateNss().getTime()));
+            pstmt.setString(8, user.getLieu());
+            pstmt.setString(9, user.getAdresse());
+            pstmt.setString(10, user.getRole().toString());
+
+            if (user.getRole() == UserRole.FORMATEUR) {
+                pstmt.setFloat(11, user.getSalaire());
+                pstmt.setString(12, user.getSpecialite());
+                pstmt.setString(13, user.getPhotoUrl());
+            } else {
+                pstmt.setString(11, user.getPhotoUrl());
+            }
+
+            int rowsInserted = pstmt.executeUpdate();
+            if (rowsInserted > 0) {
+                ResultSet generatedKeys = pstmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int userId = generatedKeys.getInt(1);
+                    user.setId(userId);
+                }
+            }
+
+            System.out.println("Utilisateur ajouté avec succès.");
+
+        } catch (SQLException | NoSuchAlgorithmException e) {
+            throw new DatabaseException("Échec de l'insertion de l'utilisateur", e);
+        }
+
+    }
+    @Override
+    //update
+    public void updateEntity(User user) throws DatabaseException {
+        String sql;
+        if (user.getRole() == UserRole.FORMATEUR) {
+            sql = "UPDATE user SET nom = ?, prenom = ?, CIN = ?, telephone = ?, email = ?, password = ?, dateNss = ?, lieu = ?, adresse = ?, role = ?, salaire = ?, specialite = ?, photoUrl = ? WHERE id = ?";
+        } else {
+            sql = "UPDATE user SET nom = ?, prenom = ?, CIN = ?, telephone = ?, email = ?, password = ?, dateNss = ?, lieu = ?, adresse = ?, role = ?, photoUrl = ? WHERE id = ?";
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, user.getNom());
+            pstmt.setString(2, user.getPrenom());
+            pstmt.setInt(3, user.getCIN());
+            pstmt.setInt(4, user.getTelephone());
+            pstmt.setString(5, user.getEmail());
+            pstmt.setString(6, hashPassword2(user.getPassword())); // Hashage du mot de passe
+            pstmt.setDate(7, new Date(user.getDateNss().getTime()));
+            pstmt.setString(8, user.getLieu());
+            pstmt.setString(9, user.getAdresse());
+            pstmt.setString(10, user.getRole().toString());
+
+            if (user.getRole() == UserRole.FORMATEUR) {
+                pstmt.setFloat(11, user.getSalaire());
+                pstmt.setString(12, user.getSpecialite());
+                pstmt.setString(13, user.getPhotoUrl());
+                pstmt.setInt(14, user.getId()); // ID pour la clause WHERE
+            } else {
+                pstmt.setString(11, user.getPhotoUrl());
+                pstmt.setInt(12, user.getId()); // ID pour la clause WHERE
+            }
+
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("User updated successfully.");
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (SQLException | NoSuchAlgorithmException e) {
+            throw new DatabaseException("Failed to update user", e);
+        }
+    }
+    //delete
+    @Override
+    public void deleteEntity(int id) throws DatabaseException {
+        String sql = "DELETE FROM user WHERE id = ?";
+        try(PreparedStatement psmt = conn.prepareStatement(sql)){
+            psmt.setInt(1,id);
+            int rowsAffected = psmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User deleted successfully.");
+            }else {
+                System.out.println("User not found .");
+            }
+        }catch (SQLException e) {
+            throw new DatabaseException("failed to delete user",e);
+        }
+    }
+    @Override
+    public List<User> displayEntities() throws DatabaseException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM user";
+        try(Statement stmt= conn.createStatement();ResultSet rs = stmt.executeQuery(sql)){
+            while (rs.next()){
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setNom(rs.getString("nom"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setCIN(rs.getInt("CIN"));
+                user.setEmail(rs.getString("email"));
+                user.setTelephone(rs.getInt("telephone"));
+                user.setLieu(rs.getString("lieu"));
+                user.setAdresse(rs.getString("adresse"));
+                user.setDateNss(rs.getDate("dateNess"));
+                user.setRole(UserRole.valueOf(rs.getString("role")));
+                user.setSpecialite(rs.getString("specialite"));
+                user.setSalaire(rs.getFloat("salaire"));
+                user.setPhotoUrl(rs.getString("photo"));
+                users.add(user);
+            }
+        }catch (SQLException e){
+            throw new DatabaseException("failed to retrieve user",e);
+        }
+        return users;
+    }
+    @Override
+    public User findEntity(int id) {
+        return null;
+    }
+
+    public User getUserByEmail(String email) {
+        String query = "SELECT * FROM user WHERE email = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setNom(rs.getString("nom"));
+                    user.setPrenom(rs.getString("prenom"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(UserRole.valueOf(rs.getString("role")));
+                    user.setTelephone(rs.getInt("telephone"));
+                    user.setDateNss(rs.getDate("dateNss"));
+                    user.setLieu(rs.getString("lieu"));
+                    user.setAdresse(rs.getString("adresse"));
+                    user.setPhotoUrl(rs.getString("photoUrl")); // ✅ Supposons que le champ en base est 'photoUrl'
+
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to retrieve user by email", e);
+        }
+
+        return null; // Return null if the user is not found
+    }
+    public void updateEmailPhoneAndImage(User u) {
+        String query = "UPDATE user SET email = ?, telephone = ?, photoUrl = ? WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, u.getEmail());
+            preparedStatement.setInt(2, u.getTelephone());
+            preparedStatement.setString(3, u.getPhotoUrl());
+            preparedStatement.setInt(4, u.getId());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User email, phone, and image updated successfully");
+            } else {
+                System.out.println("User not found");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating user: " + e.getMessage());
+        }
+    }
+    public User getUserById(int id) {
+        String query = "SELECT * FROM user WHERE id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    User user = new User();
+                    user.setId(resultSet.getInt("id"));
+                    user.setCIN(resultSet.getInt("CIN"));
+                    user.setNom(resultSet.getString("nom"));
+                    user.setPrenom(resultSet.getString("prenom"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setRole(UserRole.valueOf(resultSet.getString("role")));
+                    user.setTelephone(resultSet.getInt("telephone"));
+                    user.setDateNss(resultSet.getDate("DateNss"));
+                    user.setLieu(resultSet.getString("lieu"));
+                    user.setAdresse(resultSet.getString("adresse"));
+                    user.setPhotoUrl(resultSet.getString("photoUrl")); // ✅ champ correct
+                    return user;
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return null;
+    }
+    public User getUserByName(String userName) {
+        String query = "SELECT * FROM user WHERE nom = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, userName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setCIN(rs.getInt("CIN"));
+                    user.setNom(rs.getString("nom"));
+                    user.setPrenom(rs.getString("prenom"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(UserRole.valueOf(rs.getString("role")));
+                    user.setTelephone(rs.getInt("telephone"));
+                    user.setDateNss(rs.getDate("DateNss"));
+                    user.setLieu(rs.getString("lieu"));
+                    user.setAdresse(rs.getString("adresse"));
+                    user.setPhotoUrl(rs.getString("photoUrl")); // ✅ champ correct
+
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to retrieve user by name", e);
+        }
+
+        return null; // Return null if the user is not found
+    }
+    public boolean cinExists(String cin) {
+        String sql = "SELECT COUNT(*) FROM user WHERE CIN = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, cin);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("Erreur lors de la vérification du CIN : " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean emailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("Erreur lors de la vérification de l'email : " + e.getMessage());
+        }
+        return false;
+    }
+
+
+
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<TabPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.esprit.Controllers.Karim.EventController">
+
+    <tabs>
+        <Tab text="Event Form">
+            <VBox spacing="10" styleClass="form-container">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+                <Label text="Event Details" styleClass="form-title"/>
+
+                <GridPane hgap="10" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="30"/>
+                        <ColumnConstraints percentWidth="70"/>
+                    </columnConstraints>
+
+                    <Label text="Title*:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="titleField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Start Date*:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <DatePicker fx:id="startDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Start Time*:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="startTimeField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                    <Label text="End Date*:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <DatePicker fx:id="endDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                    <Label text="End Time*:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="endTimeField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                    <Label text="Location*:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <TextField fx:id="locationField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                    <Label text="Description:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                    <TextArea fx:id="descriptionArea" GridPane.rowIndex="6" GridPane.columnIndex="1" prefRowCount="3"/>
+
+                    <Label text="Duration (min)*:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                    <TextField fx:id="durationField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+                    <Label text="Max Participants*:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                    <TextField fx:id="maxParticipantsField" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+                    <Label text="Event Image:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+                    <HBox GridPane.rowIndex="9" GridPane.columnIndex="1" spacing="5">
+                        <TextField fx:id="imagePathField" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="uploadImageButton" text="Browse..." onAction="#handleImageUpload"/>
+                    </HBox>
+
+                    <ImageView fx:id="imagePreview" fitWidth="200" fitHeight="150" preserveRatio="true"
+                               GridPane.rowIndex="10" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
+
+                    <Label text="Category*:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="categoryCombo" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+                </GridPane>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button fx:id="saveButton" text="Save" onAction="#handleSaveEvent" styleClass="btn-primary"/>
+                    <Button fx:id="updateButton" text="Update" onAction="#handleUpdateEvent" styleClass="btn-primary"/>
+                    <Button fx:id="deleteButton" text="Delete" onAction="#handleDeleteEvent" styleClass="btn-danger"/>
+                    <Button text="Clear" onAction="#handleClearForm" styleClass="btn-default"/>
+                </HBox>
+            </VBox>
+        </Tab>
+
+        <Tab text="Event List">
+            <VBox spacing="10" styleClass="list-container">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+                <Label text="Events List" styleClass="list-title"/>
+
+                <TableView fx:id="eventTable" styleClass="event-table">
+                    <columns>
+                        <TableColumn fx:id="titleColumn" text="Title" prefWidth="150"/>
+                        <TableColumn fx:id="dateColumn" text="Date" prefWidth="120"/>
+                        <TableColumn fx:id="timeColumn" text="Time" prefWidth="100"/>
+                        <TableColumn fx:id="locationColumn" text="Location" prefWidth="120"/>
+                        <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120"/>
+                        <TableColumn fx:id="imageColumn" text="Image" prefWidth="100">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="imagePath" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Refresh" onAction="#handleRefresh" styleClass="btn-default"/>
+                </HBox>
+            </VBox>
+        </Tab>
+    </tabs>
+</TabPane>

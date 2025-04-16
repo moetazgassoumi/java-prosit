@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.esprit.Controllers.Mayssa.FrontController"
+            >
+    <stylesheets>
+        <URL value="@../../styles/stylecours.css" />
+    </stylesheets>
+
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox styleClass="nav-bar" alignment="CENTER_LEFT">
+
+            <Label text="EduConnect" styleClass="nav-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Home" styleClass="nav-button" onAction="#goToHome"/>
+            <Button text="Events" styleClass="nav-button" onAction="#goToEvents"/>
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20">
+            <!-- Page Header -->
+            <VBox alignment="CENTER" spacing="5" styleClass="page-header">
+                <Label text="Our Available Courses" styleClass="page-title"/>
+                <Label text="Expand your knowledge with our curated selection" styleClass="page-subtitle"/>
+            </VBox>
+
+            <!-- Courses Grid -->
+            <!-- Inside your ScrollPane in FXML -->
+            <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-pane">
+                <FlowPane fx:id="coursesContainer" styleClass="courses-grid"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+    <!-- Footer -->
+    <bottom>
+        <HBox alignment="CENTER" styleClass="footer">
+            <Label text="© 2023 EduConnect. All rights reserved." styleClass="footer-text"/>
+        </HBox>
+    </bottom>
+</BorderPane>

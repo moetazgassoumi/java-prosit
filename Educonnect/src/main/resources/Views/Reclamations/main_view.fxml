@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.esprit.Controllers.Aziz.MainController">
+    <top>
+        <HBox alignment="CENTER" style="-fx-background-color: #2c3e50; -fx-padding: 10;">
+            <Text fill="WHITE" text="Gestion des Réclamations et Réponses" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            <Tab fx:id="reclamationTab" text="Réclamations">
+                <fx:include fx:id="reclamationContent" source="reclamation_view.fxml"/>
+            </Tab>
+            <Tab fx:id="reponseTab" text="Réponses">
+                <fx:include fx:id="reponseContent" source="reponse_view.fxml"/>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

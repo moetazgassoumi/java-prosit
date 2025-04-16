@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.esprit.Controllers.AdminDashboardController">
+    <stylesheets>
+        <URL value="@../styles/stylesBack.css" />
+    </stylesheets>
+
+    <left>
+        <!-- Navigation Sidebar -->
+        <VBox prefWidth="200" styleClass="sidebar">
+            <!-- Logo/Header -->
+            <HBox alignment="CENTER" styleClass="sidebar-header">
+<!--                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">-->
+<!--                    <Image url="@/images/admin-icon.png" />-->
+<!--                </ImageView>-->
+                <Label text="Admin Panel" styleClass="sidebar-title" />
+            </HBox>
+
+            <!-- Navigation Items -->
+            <VBox styleClass="nav-items">
+                <Button text="Dashboard" styleClass="nav-button" onAction="#showDashboard" />
+
+                <!-- User Management -->
+                <VBox styleClass="nav-section">
+                    <Label text="USER MANAGEMENT" styleClass="nav-section-title" />
+                    <Button text="Users" styleClass="nav-button" onAction="#showUserManagement" />
+
+                </VBox>
+
+                <!-- Reclamation Management -->
+                <VBox styleClass="nav-section">
+                    <Label text="Reclamation Management" styleClass="nav-section-title" />
+                    <Button text="Reclamation" styleClass="nav-button" onAction="#showAllReclamations" />
+                    <Button text="Respons" styleClass="nav-button" onAction="#showResponse" />
+                </VBox>
+
+                <!-- Course Management -->
+                <VBox styleClass="nav-section">
+                    <Label text="Course Management" styleClass="nav-section-title" />
+                    <Button text="Course" styleClass="nav-button" onAction="#showCourses" />
+                    <Button text="Categorie" styleClass="nav-button" onAction="#showCategorie" />
+                </VBox>
+
+                <!-- Event Management -->
+                <VBox styleClass="nav-section">
+                    <Label text="Event Management" styleClass="nav-section-title" />
+                    <Button text="Event" styleClass="nav-button" onAction="#showUpcomingEvents" />
+                    <Button text="Category" styleClass="nav-button" onAction="#showCategory" />
+                </VBox>
+            </VBox>
+
+            <!-- Footer/Logout -->
+            <Button text="Logout" styleClass="logout-button" onAction="#handleLogout" />
+        </VBox>
+    </left>
+
+    <center>
+        <!-- Main Content Area -->
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <!-- Default dashboard view -->
+            <VBox fx:id="dashboardView" alignment="CENTER" spacing="20">
+                <Text text="Welcome to Admin Dashboard" styleClass="welcome-text" />
+                <HBox alignment="CENTER" spacing="40">
+                    <VBox styleClass="stat-card" alignment="CENTER">
+                        <Label text="Total Users" styleClass="stat-title" />
+                        <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value" />
+                    </VBox>
+                    <VBox styleClass="stat-card" alignment="CENTER">
+                        <Label text="Pending Reclamations" styleClass="stat-title" />
+                        <Label fx:id="pendingReclamationsLabel" text="0" styleClass="stat-value" />
+                    </VBox>
+                    <VBox styleClass="stat-card" alignment="CENTER">
+                        <Label text="Active Courses" styleClass="stat-title" />
+                        <Label fx:id="activeCoursesLabel" text="0" styleClass="stat-value" />
+                    </VBox>
+                    <VBox styleClass="stat-card" alignment="CENTER">
+                        <Label text="Upcoming Events" styleClass="stat-title" />
+                        <Label fx:id="upcomingEventsLabel" text="0" styleClass="stat-value" />
+                    </VBox>
+                </HBox>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

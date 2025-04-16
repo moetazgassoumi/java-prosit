@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.esprit.Controllers.UserTableController">
+
+    <!-- En-tête avec rôle -->
+    <top>
+        <Label fx:id="roleLabel"
+               text="Rôle sélectionné"
+               style="-fx-font-size: 18px; -fx-text-fill: red;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </Label>
+    </top>
+
+    <!-- Tableau des utilisateurs -->
+    <center>
+        <TableView fx:id="userTableView" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="nomColumn" text="Nom"/>
+                <TableColumn fx:id="prenomColumn" text="Prénom"/>
+                <TableColumn fx:id="emailColumn" text="Email"/>
+                <TableColumn fx:id="cinColumn" text="CIN"/>
+                <TableColumn fx:id="telColumn" text="Téléphone"/>
+                <TableColumn fx:id="lieuColumn" text="Lieu"/>
+                <TableColumn fx:id="adresseColumn" text="Adresse"/>
+                <TableColumn fx:id="dateNssColumn" text="Date Naissance"/>
+                <TableColumn fx:id="roleColumn" text="Rôle"/>
+                <TableColumn fx:id="specialiteColumn" text="Spécialité"/>
+                <TableColumn fx:id="salaireColumn" text="Salaire"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- Formulaire de mise à jour -->
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <HBox spacing="10">
+                <Label text="Email:"/>
+                <TextField fx:id="emailField" promptText="Modifier l'email"/>
+                <Label text="Téléphone:"/>
+                <TextField fx:id="telField" promptText="Modifier le téléphone"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <Label text="Photo:"/>
+                <TextField fx:id="photoField" promptText="Modifier le chemin de l'image"/>
+                <Button text="Parcourir" onAction="#handleBrowse" fx:id="browseBtn"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <Button text="Mettre à jour" onAction="#handleUpdate" fx:id="updateBtn"/>
+                <Button text="Supprimer" onAction="#handleDelete" fx:id="deleteBtn"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>
