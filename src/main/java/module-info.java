@@ -12,6 +12,7 @@ module com.example.educonnect.educonnect {
     requires mysql.connector.java;
     requires MaterialFX;
     requires javafx.swing;
+    requires java.mail;
 
     opens com.example.educonnect.educonnect.Entities to javafx.fxml;
     exports com.example.educonnect.educonnect.Entities;

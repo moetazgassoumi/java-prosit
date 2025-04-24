@@ -306,5 +306,21 @@ public class UserRepository implements EntityCrud<User> {
 
         return null; // Return null if the user is not found
     }
+    public int getUserIdByEmail(String email) {
+        String query = "SELECT id FROM user WHERE email = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to retrieve user ID by email", e);
+        }
+
+        return -1; // Return -1 if the user is not found
+    }
 
 }
