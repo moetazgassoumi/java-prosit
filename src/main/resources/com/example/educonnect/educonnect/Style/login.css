@@ -1,0 +1,35 @@
+.header-label {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.input-field {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #1E90FF;
+    -fx-padding: 8;
+    -fx-prompt-text-fill: #999;
+    -fx-font-size: 14px;
+}
+
+.login-button {
+    -fx-background-color: #1E90FF;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 10 40 10 40;
+    -fx-cursor: hand;
+}
+
+.login-button:hover {
+    -fx-background-color: #4682B4;
+}
+
+.forgot-link {
+    -fx-text-fill: #1E90FF;
+    -fx-underline: true;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}

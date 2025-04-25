@@ -2,30 +2,53 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.educonnect.educonnect.Controllers.LoginController"
-            prefWidth="400" prefHeight="300">
+<StackPane fx:controller="com.example.educonnect.educonnect.Controllers.LoginController"
+           xmlns:fx="http://javafx.com/fxml"
+           xmlns="http://javafx.com/javafx"
+           prefHeight="600" prefWidth="500"
+           stylesheets="@../Style/login.css">
 
-    <VBox alignment="CENTER" spacing="15.0" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
-        <Label text="Connexion" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <VBox alignment="CENTER" spacing="20">
+        <Label text="EduConnect"
+               styleClass="header-label" />
 
-        <GridPane hgap="10" vgap="10">
-            <columnConstraints>
-                <ColumnConstraints halignment="RIGHT"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-            </columnConstraints>
+        <Label text="Connexion"
+               textFill="#1E90FF">
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Label>
 
-            <Label text="Email :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <TextField fx:id="ck_emailField" promptText="Entrez votre email" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <!-- Email Field with icon -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <FontAwesomeIconView glyphName="USER" size="18" fill="#1E90FF"/>
+            <TextField fx:id="ck_emailField" promptText="Email" styleClass="input-field"/>
+        </HBox>
 
-            <Label text="Mot de passe :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <PasswordField fx:id="ck_passwordField" promptText="Entrez votre mot de passe" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-        </GridPane>
+        <!-- Password Field with icon -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <FontAwesomeIconView glyphName="LOCK" size="18" fill="#1E90FF"/>
+            <PasswordField fx:id="ck_passwordField" promptText="Mot de passe" styleClass="input-field"/>
+        </HBox>
 
-        <Button fx:id="signIn_btn" text="Se connecter" maxWidth="150"/>
+        <!-- Login Button -->
+        <Button fx:id="signIn_btn" text="Se connecter"
+                styleClass="login-button" />
+
+        <!-- Forgot Password -->
+        <Hyperlink fx:id="forgot_password" text="Mot de passe oublié ?"
+                   onMouseClicked="#onForgotPasswordClick"
+                   styleClass="forgot-link"/>
     </VBox>
-
-</AnchorPane>
+</StackPane>

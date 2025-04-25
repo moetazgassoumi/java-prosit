@@ -11,8 +11,8 @@ import java.util.Properties;
 public class SendMail {
 
     public static boolean send(String to, String subject, String text) {
-        String from = "khairibouzid95@gmail.com";
-        String password = "ohdv puqy vwqg hoou"; // Replace with your real password
+        String from = "educonnectinventors@gmail.com";
+        String password = "urmj pyom uppg qumn"; // Replace with your real password
         String host = "smtp.gmail.com";
 
         Properties properties = System.getProperties();
@@ -42,8 +42,8 @@ public class SendMail {
         }
     }
     public static void sendEmailWithoutAttachment(String recipientEmail, String subject, String messageContent) {
-        final String username = "nasseffadhlaoui@gmail.com"; // Votre adresse e-mail
-        final String password = "xnye onep frrg swzp\n"; // Votre mot de passe d'application
+        final String username = "educonnectinventors@gmail.com"; // Votre adresse e-mail
+        final String password = "urmj pyom uppg qumn"; // Votre mot de passe d'application
 
         // Configuration du serveur SMTP
         Properties prop = new Properties();

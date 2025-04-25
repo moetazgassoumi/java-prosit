@@ -7,8 +7,12 @@ import com.example.educonnect.educonnect.Repository.AuthRepository;
 import com.example.educonnect.educonnect.Repository.UserRepository;
 
 import com.example.educonnect.educonnect.Utils.Modals;
+import com.example.educonnect.educonnect.Utils.Navigate;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 
@@ -20,6 +24,7 @@ import static com.example.educonnect.educonnect.Utils.RoleNavigation.navigateUse
 
 
 public class LoginController implements Initializable {
+    public Hyperlink forgot_password;
     @FXML
     private TextField ck_emailField;
 
@@ -51,6 +56,12 @@ public class LoginController implements Initializable {
             Modals.displayError("Login Failed", "Invalid email or password");
         }
     }
+    public void onForgotPasswordClick(MouseEvent mouseEvent) {
+        System.out.println("Forgot password clicked");
+        Stage window = (Stage) forgot_password.getScene().getWindow(); // ✅ changement ici
+        Navigate.navigate(forgot_password, "views/ForgotPassword.fxml", window);
+    }
+
 
 
 
@@ -58,6 +69,16 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("LoginController initialized.");
 
+        // Charger le fichier CSS après le rendu de la scène
+        Platform.runLater(() -> {
+            // Récupérer la scène à partir de la fenêtre
+            Stage stage = (Stage) signIn_btn.getScene().getWindow();
+            Scene scene = stage.getScene();
+            // Ajouter le fichier CSS à la scène
+            getClass().getResource("/com/example/educonnect/educonnect/Style/login.css");
+        });
+
+        // Ajouter le gestionnaire d'action pour le bouton de connexion
         signIn_btn.setOnAction(event -> {
             try {
                 handleLogin();
@@ -67,4 +88,5 @@ public class LoginController implements Initializable {
             }
         });
     }
+
 }
