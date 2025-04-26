@@ -8,15 +8,23 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.educonnect.educonnect.Controllers.UserTableController">
 
-    <!-- En-tête avec rôle -->
+    <!-- En-tête avec rôle et recherche -->
     <top>
-        <Label fx:id="roleLabel"
-               text="Rôle sélectionné"
-               style="-fx-font-size: 18px;">
+        <VBox spacing="8">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-        </Label>
+
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Filtrer par rôle :" style="-fx-font-size: 14px;"/>
+                <ComboBox fx:id="roleFilterComboBox" promptText="Choisir un rôle" onAction="#handleRoleSelection"/>
+
+                <Label text="Rechercher :" style="-fx-font-size: 14px;"/>
+                <TextField fx:id="searchField" promptText="CIN, Email ou Téléphone" onKeyReleased="#handleSearch"/>
+            </HBox>
+
+            <Label fx:id="roleLabel" text="Rôle sélectionné" style="-fx-font-size: 18px;"/>
+        </VBox>
     </top>
 
     <!-- Tableau des utilisateurs -->
@@ -32,13 +40,13 @@
                 <TableColumn fx:id="adresseColumn" text="Adresse"/>
                 <TableColumn fx:id="dateNssColumn" text="Date Naissance"/>
                 <TableColumn fx:id="roleColumn" text="Rôle"/>
-                <TableColumn fx:id="specialiteColumn" text="Spécialité"/>
-                <TableColumn fx:id="salaireColumn" text="Salaire"/>
+                <TableColumn fx:id="specialiteColumn" text="Spécialité" visible="false"/>
+                <TableColumn fx:id="salaireColumn" text="Salaire" visible="false"/>
             </columns>
         </TableView>
     </center>
 
-    <!-- Formulaire de mise à jour -->
+    <!-- Formulaire de mise à jour et boutons -->
     <bottom>
         <VBox spacing="10">
             <padding>
@@ -55,12 +63,13 @@
             <HBox spacing="10">
                 <Label text="Photo:"/>
                 <TextField fx:id="photoField" promptText="Modifier le chemin de l'image"/>
-                <Button text="Parcourir" onAction="#handleBrowse" fx:id="browseBtn"/>
+                <Button fx:id="browseBtn" text="Parcourir" onAction="#handleBrowse"/>
             </HBox>
 
             <HBox spacing="10">
-                <Button text="Mettre à jour" onAction="#handleUpdate" fx:id="updateBtn"/>
-                <Button text="Supprimer" onAction="#handleDelete" fx:id="deleteBtn"/>
+                <Button fx:id="updateBtn" text="Mettre à jour" onAction="#handleUpdate"/>
+                <Button fx:id="deleteBtn" text="Supprimer" onAction="#handleDelete"/>
+                <Button text="Exporter en PDF" onAction="#handleExportPDF"/>
             </HBox>
         </VBox>
     </bottom>

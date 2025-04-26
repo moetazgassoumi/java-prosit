@@ -1,10 +1,8 @@
 package com.example.educonnect.educonnect.Controllers;
-
 import com.example.educonnect.educonnect.Entities.User;
 import com.example.educonnect.educonnect.Entities.UserRole;
 import com.example.educonnect.educonnect.Exceptions.DatabaseException;
 import com.example.educonnect.educonnect.Repository.UserRepository;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
@@ -26,25 +24,37 @@ public class SignupController {
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private DatePicker dateNssPicker;
-    @FXML private TextField lieuField;
+    @FXML private ComboBox<String> lieuComboBox;
     @FXML private TextField adresseField;
     @FXML private ComboBox<UserRole> roleComboBox;
     @FXML private TextField specialiteField;
     @FXML private TextField salaireField;
     @FXML private TextField photoField;
-    @FXML private Label messageLabel;
     @FXML private TextField visiblePasswordField;
     @FXML private CheckBox showPasswordCheckBox;
     @FXML private ProgressBar passwordStrengthBar;
     @FXML private Label passwordStrengthLabel;
 
+    // Error Labels
+    @FXML private Label nomErrorLabel;
+    @FXML private Label prenomErrorLabel;
+    @FXML private Label emailErrorLabel;
+    @FXML private Label passwordErrorLabel;
+    @FXML private Label confirmPasswordErrorLabel;
+
     private final UserRepository userRepository = new UserRepository();
 
     @FXML
     public void initialize() {
-        roleComboBox.getItems().setAll(UserRole.values());
+        roleComboBox.getItems().setAll(UserRole.FORMATEUR, UserRole.MEMBRE);
+        lieuComboBox.getItems().addAll(
+                "Tunis", "Ariana", "Ben Arous", "Manouba", "Nabeul", "Zaghouan", "Bizerte",
+                "Beja", "Jendouba", "Kef", "Siliana", "Sousse", "Monastir", "Mahdia", "Kairouan",
+                "Kasserine", "Sidi Bouzid", "Sfax", "Gafsa", "Tozeur", "Kebili", "Gabès",
+                "Médenine", "Tataouine"
+        );
         roleComboBox.setOnAction(event -> toggleFormateurFields());
-        toggleFormateurFields(); // cacher salaire/specialité au début
+        toggleFormateurFields();
     }
 
     private void toggleFormateurFields() {
@@ -65,6 +75,7 @@ public class SignupController {
             photoField.setText(selectedFile.getAbsolutePath());
         }
     }
+
     @FXML
     private void togglePasswordVisibility() {
         boolean show = showPasswordCheckBox.isSelected();
@@ -74,6 +85,7 @@ public class SignupController {
         passwordField.setVisible(!show);
         passwordField.setManaged(!show);
     }
+
     private void updatePasswordStrength(String password) {
         double strength = calculatePasswordStrength(password);
         passwordStrengthBar.setProgress(strength);
@@ -89,6 +101,7 @@ public class SignupController {
             passwordStrengthLabel.setText("Fort");
         }
     }
+
     private double calculatePasswordStrength(String password) {
         int length = password.length();
         boolean hasUpper = password.matches(".*[A-Z].*");
@@ -106,7 +119,6 @@ public class SignupController {
         return score / 5.0;
     }
 
-
     @FXML
     private void handleSignup() {
         if (!isInputValid()) return;
@@ -119,7 +131,7 @@ public class SignupController {
         user.setEmail(emailField.getText());
         user.setPassword(passwordField.getText());
         user.setDateNss(Date.valueOf(dateNssPicker.getValue()));
-        user.setLieu(lieuField.getText());
+        user.setLieu(lieuComboBox.getValue());
         user.setAdresse(adresseField.getText());
         user.setRole(roleComboBox.getValue());
         user.setPhotoUrl(photoField.getText());
@@ -131,58 +143,58 @@ public class SignupController {
 
         try {
             userRepository.addEntity(user);
-            messageLabel.setText("Inscription réussie !");
+            nomErrorLabel.setText("Inscription réussie !");
             clearForm();
         } catch (DatabaseException e) {
-            messageLabel.setText("Erreur lors de l'inscription : " + e.getMessage());
+            nomErrorLabel.setText("Erreur lors de l'inscription : " + e.getMessage());
         }
     }
 
     private boolean isInputValid() {
-        StringBuilder errors = new StringBuilder();
+        boolean valid = true;
+        nomErrorLabel.setText("");
+        prenomErrorLabel.setText("");
+        emailErrorLabel.setText("");
+        passwordErrorLabel.setText("");
+        confirmPasswordErrorLabel.setText("");
 
-        if (nomField.getText().isEmpty()) errors.append("Nom requis\n");
-        if (prenomField.getText().isEmpty()) errors.append("Prénom requis\n");
-        if (cinField.getText().isEmpty() || !cinField.getText().matches("\\d+")) errors.append("CIN invalide\n");
-        if (telephoneField.getText().isEmpty() || !telephoneField.getText().matches("\\d+")) errors.append("Téléphone invalide\n");
-        if (emailField.getText().isEmpty() || !isValidEmail(emailField.getText())) errors.append("Email invalide\n");
-
-
-        if (passwordField.getText().isEmpty()) errors.append("Mot de passe requis\n");
-        if (!passwordField.getText().equals(confirmPasswordField.getText())) errors.append("Les mots de passe ne correspondent pas\n");
-
-        if (dateNssPicker.getValue() == null || dateNssPicker.getValue().isAfter(LocalDate.now())) errors.append("Date de naissance invalide\n");
-        if (lieuField.getText().isEmpty()) errors.append("Lieu requis\n");
-        if (adresseField.getText().isEmpty()) errors.append("Adresse requise\n");
-        if (roleComboBox.getValue() == null) errors.append("Rôle requis\n");
-
-        if (roleComboBox.getValue() == UserRole.FORMATEUR) {
-            if (specialiteField.getText().isEmpty()) errors.append("Spécialité requise\n");
-            if (salaireField.getText().isEmpty() || !salaireField.getText().matches("\\d+(\\.\\d+)?")) errors.append("Salaire invalide\n");
+        if (nomField.getText().isEmpty()) {
+            nomErrorLabel.setText("Nom requis");
+            valid = false;
         }
-
-        if (errors.length() > 0) {
-            messageLabel.setText(errors.toString());
-            return false;
+        if (prenomField.getText().isEmpty()) {
+            prenomErrorLabel.setText("Prénom requis");
+            valid = false;
         }
-
-        return true;
+        if (emailField.getText().isEmpty() || !isValidEmail(emailField.getText())) {
+            emailErrorLabel.setText("Email invalide");
+            valid = false;
+        }
+        if (passwordField.getText().isEmpty()) {
+            passwordErrorLabel.setText("Mot de passe requis");
+            valid = false;
+        }
+        if (!passwordField.getText().equals(confirmPasswordField.getText())) {
+            confirmPasswordErrorLabel.setText("Les mots de passe ne correspondent pas");
+            valid = false;
+        }
+        return valid;
     }
 
     private void clearForm() {
         nomField.clear();
         prenomField.clear();
         cinField.clear();
-        telephoneField.clear();
         emailField.clear();
         passwordField.clear();
         confirmPasswordField.clear();
         dateNssPicker.setValue(null);
-        lieuField.clear();
+        lieuComboBox.setValue(null);
         adresseField.clear();
         roleComboBox.setValue(null);
         specialiteField.clear();
         salaireField.clear();
         photoField.clear();
+        telephoneField.clear();
     }
 }

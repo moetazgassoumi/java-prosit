@@ -117,7 +117,7 @@ public class AuthRepository {
     }
 
     public void modifyPassword(int id, String password) {
-        String query = "UPDATE user SET mdp = ? WHERE id = ?";
+        String query = "UPDATE user SET password = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, hashPassword2(password));

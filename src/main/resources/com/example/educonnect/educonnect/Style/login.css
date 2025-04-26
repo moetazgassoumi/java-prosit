@@ -1,35 +1,55 @@
+.root {
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
 .header-label {
-    -fx-font-size: 30px;
+    -fx-font-size: 34px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333;
+    -fx-text-fill: #2c3e50;
 }
 
 .input-field {
     -fx-background-radius: 10;
     -fx-border-radius: 10;
-    -fx-border-color: #1E90FF;
-    -fx-padding: 8;
-    -fx-prompt-text-fill: #999;
+    -fx-border-color: #3498db;
+    -fx-background-color: white;
+    -fx-padding: 8 14;
     -fx-font-size: 14px;
+    -fx-prompt-text-fill: #aaa;
+    -fx-min-width: 250px;
 }
 
 .login-button {
-    -fx-background-color: #1E90FF;
+    -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-background-radius: 20;
-    -fx-padding: 10 40 10 40;
+    -fx-background-radius: 25;
+    -fx-padding: 10 30;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.3, 0, 3);
+    -fx-transition: all 0.3s ease-in-out;
 }
 
 .login-button:hover {
-    -fx-background-color: #4682B4;
+    -fx-background-color: linear-gradient(to right, #2980b9, #3498db);
 }
 
 .forgot-link {
-    -fx-text-fill: #1E90FF;
+    -fx-text-fill: #2980b9;
     -fx-underline: true;
     -fx-font-size: 13px;
     -fx-cursor: hand;
+}
+
+#quoteLabel {
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+    -fx-text-fill: #444;
+    -fx-text-alignment: center;
+}
+
+#quoteAuthorLabel {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
 }

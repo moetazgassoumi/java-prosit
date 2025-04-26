@@ -1,54 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 
 <StackPane fx:controller="com.example.educonnect.educonnect.Controllers.LoginController"
            xmlns:fx="http://javafx.com/fxml"
            xmlns="http://javafx.com/javafx"
-           prefHeight="600" prefWidth="500"
-           stylesheets="@../Style/login.css">
+           prefWidth="700" prefHeight="600"
+           stylesheets="@../Style/login.css"
+           style="-fx-background-color: linear-gradient(to bottom right, #f2f9ff, #d6e6ff);">
 
-    <VBox alignment="CENTER" spacing="20">
-        <Label text="EduConnect"
-               styleClass="header-label" />
+    <VBox alignment="CENTER" spacing="20" maxWidth="400" StackPane.alignment="CENTER">
+        <Label text="EduConnect" styleClass="header-label"/>
 
-        <Label text="Connexion"
-               textFill="#1E90FF">
-            <font>
-                <Font size="22.0" />
-            </font>
+        <Label text="Connexion" textFill="#1E90FF">
+            <font><Font size="20"/></font>
         </Label>
 
-        <!-- Email Field with icon -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <FontAwesomeIconView glyphName="USER" size="18" fill="#1E90FF"/>
-            <TextField fx:id="ck_emailField" promptText="Email" styleClass="input-field"/>
-        </HBox>
+        <!-- 🌤️ MÉTÉO -->
+        <VBox alignment="CENTER" spacing="5" style="-fx-text-fill: #1E90FF;">
+            <Label fx:id="weatherLabel" text="Chargement météo..."
+                   wrapText="true"
+                   style="-fx-font-size: 13px; -fx-text-fill: #1E90FF;" maxWidth="350"/>
+        </VBox>
+        <!-- 📝 CITATION -->
+        <VBox spacing="4" alignment="CENTER">
+            <Label fx:id="quoteLabel"
+                   wrapText="true"
+                   maxWidth="340"
+                   styleClass="quote-text" />
+            <Label fx:id="quoteAuthorLabel"
+                   wrapText="true"
+                   maxWidth="300"
+                   styleClass="quote-author" />
+        </VBox>
 
-        <!-- Password Field with icon -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <FontAwesomeIconView glyphName="LOCK" size="18" fill="#1E90FF"/>
-            <PasswordField fx:id="ck_passwordField" promptText="Mot de passe" styleClass="input-field"/>
-        </HBox>
 
-        <!-- Login Button -->
-        <Button fx:id="signIn_btn" text="Se connecter"
-                styleClass="login-button" />
 
-        <!-- Forgot Password -->
+        <!-- Form Fields -->
+        <VBox spacing="15" alignment="CENTER">
+            <!-- Email -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <FontAwesomeIconView glyphName="USER" size="18" fill="#1E90FF"/>
+                <TextField fx:id="ck_emailField" promptText="Email" styleClass="input-field"/>
+            </HBox>
+
+            <!-- Password -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <FontAwesomeIconView glyphName="LOCK" size="18" fill="#1E90FF"/>
+                <PasswordField fx:id="ck_passwordField" promptText="Mot de passe" styleClass="input-field"/>
+            </HBox>
+        </VBox>
+
+        <!-- Connexion -->
+        <Button fx:id="signIn_btn" text="Se connecter" styleClass="login-button"/>
+
+        <!-- Mot de passe oublié -->
         <Hyperlink fx:id="forgot_password" text="Mot de passe oublié ?"
-                   onMouseClicked="#onForgotPasswordClick"
-                   styleClass="forgot-link"/>
+                   onMouseClicked="#onForgotPasswordClick" styleClass="forgot-link"/>
     </VBox>
 </StackPane>

@@ -1,5 +1,4 @@
 module com.example.educonnect.educonnect {
-    requires javafx.web;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -13,6 +12,9 @@ module com.example.educonnect.educonnect {
     requires MaterialFX;
     requires javafx.swing;
     requires java.mail;
+    requires kernel;
+    requires layout;
+    requires org.json;
 
     opens com.example.educonnect.educonnect.Entities to javafx.fxml;
     exports com.example.educonnect.educonnect.Entities;

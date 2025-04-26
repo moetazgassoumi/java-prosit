@@ -1,9 +1,13 @@
-// UserTableController.java
 package com.example.educonnect.educonnect.Controllers;
 
 import com.example.educonnect.educonnect.Entities.User;
 import com.example.educonnect.educonnect.Entities.UserRole;
 import com.example.educonnect.educonnect.Repository.UserRepository;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,13 +16,17 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import com.itextpdf.layout.properties.UnitValue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 public class UserTableController {
 
     @FXML private Label roleLabel;
+    @FXML private ComboBox<String> roleFilterComboBox;
+    @FXML private TextField searchField;
     @FXML private TableView<User> userTableView;
 
     @FXML private TableColumn<User, String> nomColumn;
@@ -42,9 +50,12 @@ public class UserTableController {
 
     private final UserRepository userRepo = new UserRepository();
     private User selectedUser;
+    private ObservableList<User> originalUserList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        roleFilterComboBox.getItems().addAll("ADMIN", "FORMATEUR", "MEMBRE");
+
         nomColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNom()));
         prenomColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPrenom()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
@@ -54,37 +65,126 @@ public class UserTableController {
         adresseColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAdresse()));
         dateNssColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateNss().toString()));
         roleColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRole().toString()));
-
-        userTableView.setOnMouseClicked(event -> {
-            selectedUser = userTableView.getSelectionModel().getSelectedItem();
-            if (selectedUser != null) {
-                emailField.setText(selectedUser.getEmail());
-                telField.setText(String.valueOf(selectedUser.getTelephone()));
-                photoField.setText(selectedUser.getPhotoUrl());
-            }
-        });
     }
 
+    @FXML
+    public void handleRoleSelection() {
+        String selectedRole = roleFilterComboBox.getValue();
+        if (selectedRole != null && !selectedRole.isEmpty()) {
+            loadData(selectedRole);
+        }
+    }
+
+    @FXML
     public void loadData(String role) {
         try {
             UserRole selectedRole = UserRole.valueOf(role.toUpperCase());
             roleLabel.setText("Rôle : " + selectedRole);
 
             ObservableList<User> users = FXCollections.observableArrayList(userRepo.getUsersByRole(role.toUpperCase()));
-            userTableView.setItems(users);
+            originalUserList.setAll(users);
+            userTableView.setItems(originalUserList);
 
             if (selectedRole == UserRole.FORMATEUR) {
-                specialiteColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSpecialite()));
-                salaireColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getSalaire()).asObject());
-                if (!userTableView.getColumns().contains(specialiteColumn)) {
-                    userTableView.getColumns().addAll(specialiteColumn, salaireColumn);
-                }
+                specialiteColumn.setVisible(true);
+                salaireColumn.setVisible(true);
             } else {
-                userTableView.getColumns().removeAll(specialiteColumn, salaireColumn);
+                specialiteColumn.setVisible(false);
+                salaireColumn.setVisible(false);
             }
 
         } catch (IllegalArgumentException | SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Erreur : " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    public void handleSearch() {
+        String keyword = searchField.getText().toLowerCase();
+
+        ObservableList<User> filteredList = originalUserList.filtered(user ->
+                String.valueOf(user.getCIN()).contains(keyword) ||
+                        user.getEmail().toLowerCase().contains(keyword) ||
+                        String.valueOf(user.getTelephone()).contains(keyword)
+        );
+
+        userTableView.setItems(filteredList);
+    }
+
+    @FXML
+    public void handleExportPDF() {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer en PDF");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+            File file = fileChooser.showSaveDialog(null);
+            if (file == null) return;
+
+            PdfWriter writer = new PdfWriter(file.getAbsolutePath());
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            document.add(new Paragraph("Liste complète des utilisateurs\n\n"));
+
+            float[] columnWidths = {1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1}; // Proportions
+            Table table = new Table(columnWidths);
+            table.setWidth(UnitValue.createPercentValue(100));
+
+            table.addHeaderCell("Nom");
+            table.addHeaderCell("Prénom");
+            table.addHeaderCell("Email");
+            table.addHeaderCell("CIN");
+            table.addHeaderCell("Téléphone");
+            table.addHeaderCell("Lieu");
+            table.addHeaderCell("Adresse");
+            table.addHeaderCell("Date Naissance");
+            table.addHeaderCell("Rôle");
+            table.addHeaderCell("Spécialité");
+            table.addHeaderCell("Salaire");
+
+            for (User user : userTableView.getItems()) {
+                table.addCell(user.getNom());
+                table.addCell(user.getPrenom());
+                table.addCell(user.getEmail());
+                table.addCell(String.valueOf(user.getCIN()));
+                table.addCell(String.valueOf(user.getTelephone()));
+                table.addCell(user.getLieu());
+                table.addCell(user.getAdresse());
+                table.addCell(user.getDateNss().toString());
+                table.addCell(user.getRole().toString());
+
+                if (user.getRole() == UserRole.FORMATEUR) {
+                    table.addCell(user.getSpecialite() != null ? user.getSpecialite() : "-");
+                    table.addCell(String.valueOf(user.getSalaire()));
+                } else {
+                    table.addCell("-");
+                    table.addCell("-");
+                }
+            }
+
+            document.add(table);
+            document.close();
+
+            new Alert(Alert.AlertType.INFORMATION, "Export PDF réussi !").showAndWait();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Erreur : Fichier introuvable.").showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Erreur lors de l'export PDF : " + e.getMessage()).showAndWait();
+        }
+    }
+    @FXML
+    public void handleBrowse() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
+        );
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            photoField.setText(file.getAbsolutePath());
         }
     }
 
@@ -111,14 +211,4 @@ public class UserTableController {
         }
     }
 
-    @FXML
-    public void handleBrowse() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une image");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            photoField.setText(file.getAbsolutePath());
-        }
-    }
 }

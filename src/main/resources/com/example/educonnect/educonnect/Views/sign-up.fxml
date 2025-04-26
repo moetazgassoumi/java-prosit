@@ -5,7 +5,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
 
-
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.example.educonnect.educonnect.Controllers.SignupController"
@@ -23,24 +22,32 @@
                 <font><Font size="22.0"/></font>
             </Label>
 
-            <!-- Champs du formulaire -->
             <TextField fx:id="nomField" promptText="Entrez votre nom" styleClass="custom-textfield"/>
+            <Label fx:id="nomErrorLabel" textFill="red" style="-fx-font-size: 10px;"/>
+
             <TextField fx:id="prenomField" promptText="Entrez votre prénom" styleClass="custom-textfield"/>
+            <Label fx:id="prenomErrorLabel" textFill="red" style="-fx-font-size: 10px;"/>
+
             <TextField fx:id="emailField" promptText="Entrez votre email" styleClass="custom-textfield"/>
+            <Label fx:id="emailErrorLabel" textFill="red" style="-fx-font-size: 10px;"/>
 
             <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="custom-textfield"/>
-            <TextField fx:id="visiblePasswordField" promptText="Mot de passe" styleClass="custom-textfield"
-                       visible="false" managed="false"/>
-
+            <TextField fx:id="visiblePasswordField" promptText="Mot de passe" styleClass="custom-textfield" visible="false" managed="false"/>
             <CheckBox fx:id="showPasswordCheckBox" text="Afficher le mot de passe" onAction="#togglePasswordVisibility"/>
+            <Label fx:id="passwordErrorLabel" textFill="red" style="-fx-font-size: 10px;"/>
 
             <PasswordField fx:id="confirmPasswordField" promptText="Confirmez le mot de passe" styleClass="custom-textfield"/>
+            <Label fx:id="confirmPasswordErrorLabel" textFill="red" style="-fx-font-size: 10px;"/>
+
             <TextField fx:id="cinField" promptText="CIN" styleClass="custom-textfield"/>
             <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="custom-textfield"/>
             <DatePicker fx:id="dateNssPicker" promptText="Date de naissance" styleClass="custom-textfield"/>
-            <TextField fx:id="lieuField" promptText="Lieu de naissance" styleClass="custom-textfield"/>
+
+            <ComboBox fx:id="lieuComboBox" promptText="Lieu de naissance" styleClass="custom-textfield"/>
             <TextField fx:id="adresseField" promptText="Adresse complète" styleClass="custom-textfield"/>
+
             <ComboBox fx:id="roleComboBox" promptText="Rôle" styleClass="custom-textfield"/>
+
             <TextField fx:id="specialiteField" promptText="Votre spécialité" styleClass="custom-textfield"/>
             <TextField fx:id="salaireField" promptText="Salaire" styleClass="custom-textfield"/>
 
@@ -54,7 +61,6 @@
                 <Label fx:id="passwordStrengthLabel"/>
             </VBox>
 
-            <Label fx:id="messageLabel" styleClass="error-message" wrapText="true"/>
             <Button text="S'inscrire" onAction="#handleSignup" styleClass="custom-button"/>
         </VBox>
     </ScrollPane>
