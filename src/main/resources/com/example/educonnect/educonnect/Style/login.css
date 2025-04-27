@@ -1,5 +1,6 @@
 .root {
     -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-background-color: linear-gradient(to bottom right, #f2f9ff, #d6e6ff);
 }
 
 .header-label {
@@ -8,26 +9,34 @@
     -fx-text-fill: #2c3e50;
 }
 
+/* 🎯 Input Field */
 .input-field {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
     -fx-border-color: #3498db;
     -fx-background-color: white;
     -fx-padding: 8 14;
     -fx-font-size: 14px;
-    -fx-prompt-text-fill: #aaa;
-    -fx-min-width: 250px;
+    -fx-prompt-text-fill: #bbb;
+    -fx-min-width: 260px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0.2, 0, 2);
 }
 
+.input-field:focused {
+    -fx-border-color: #1E90FF;
+    -fx-effect: dropshadow(gaussian, rgba(30,144,255,0.3), 10, 0.4, 0, 4);
+}
+
+/* 🎯 Login Button */
 .login-button {
     -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
     -fx-text-fill: white;
-    -fx-font-size: 15px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-background-radius: 25;
-    -fx-padding: 10 30;
+    -fx-background-radius: 30px;
+    -fx-padding: 10 35;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.3, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.4, 0, 4);
     -fx-transition: all 0.3s ease-in-out;
 }
 
@@ -35,13 +44,32 @@
     -fx-background-color: linear-gradient(to right, #2980b9, #3498db);
 }
 
+/* 🌟 Bouton Reconnaissance Faciale */
+.face-recognition-button {
+    -fx-background-color: linear-gradient(to right, #2ecc71, #27ae60);
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 30px;
+    -fx-padding: 10 35;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.4, 0, 4);
+    -fx-border-color: transparent;
+}
+
+.face-recognition-button:hover {
+    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+}
+
+/* 🔵 Lien "Mot de passe oublié" */
 .forgot-link {
-    -fx-text-fill: #2980b9;
+    -fx-text-fill: #3498db;
     -fx-underline: true;
     -fx-font-size: 13px;
     -fx-cursor: hand;
 }
 
+/* 📜 Citation */
 #quoteLabel {
     -fx-font-size: 13px;
     -fx-font-style: italic;
@@ -54,31 +82,13 @@
     -fx-text-fill: #666;
 }
 
-/* 🌟 Style pour le bouton Reconnaissance Faciale */
-.face-recognition-button {
-    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 25;
-    -fx-padding: 10 25;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.3, 0, 3);
-    -fx-transition: all 0.3s ease-in-out;
-    -fx-border-color: transparent;
-}
-
-.face-recognition-button:hover {
-    -fx-background-color: linear-gradient(to right, #2ecc71, #27ae60);
-}
-
-/* ⏳ Style pour l'Overlay */
+/* ⏳ Overlay de Chargement */
 #overlay {
-    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-color: rgba(0, 0, 0, 0.6);
     -fx-alignment: center;
 }
 
-/* ⏳ Style pour le Label de statut dans l'Overlay */
+/* ⏳ Label de Statut */
 #statusLabel {
     -fx-text-fill: white;
     -fx-font-size: 16px;
@@ -86,7 +96,16 @@
     -fx-padding: 10;
 }
 
-/* ⏳ Style pour le ProgressIndicator */
+/* ⏳ Progress Indicator */
 #progressIndicator {
     -fx-progress-color: #ffffff;
+}
+
+/* 🎴 Card container pour le formulaire */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 35px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0.4, 0, 8);
+    -fx-alignment: center;
 }

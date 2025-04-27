@@ -1,15 +1,13 @@
-
 package com.example.educonnect.educonnect.Controllers;
 
 import com.example.educonnect.educonnect.Entities.*;
 import com.example.educonnect.educonnect.Main;
 import com.example.educonnect.educonnect.Repository.*;
 import com.example.educonnect.educonnect.Utils.FaceDetector;
-import com.example.educonnect.educonnect.Repository.FaceRecognitionRepository;
 import com.example.educonnect.educonnect.Utils.Modals;
-import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -29,86 +27,89 @@ import org.bytedeco.opencv.global.opencv_imgcodecs;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
+import java.util.*;
 
 import static com.example.educonnect.educonnect.Utils.Validator.isValidEmail;
 
 public class UseraccountController implements Initializable {
+
     public Button Home_Btn, Users_Btn, Reclamations_Btn, Events_Btn, Logout_Btn;
     public Pane general_pane;
-    public MFXButton Confirmer_AccountUser, Update_AccountUser, ConfirmerD0_AccountUser1;
-    public MFXTextField tf_UserAccountNumero, tf_UserAccountEmail;
+    public Button Update_AccountUser, ConfirmerD0_AccountUser1, ChangeImageBtn;
+    public TextField tf_UserAccountNumero, tf_UserAccountEmail;
     public ImageView ImageviewUser;
-    public MFXGenericDialog DialogConfirm_Delete, Dialog_UpdatePassword_User;
-    public MFXButton AnnulerDelete1_User, ConfirmDelete1_User;
     public Label user_name;
-    public MFXButton UpdatePassword_User, AnnulerUpdateP_User, ChangeImageBtn;
-    private File selectedImageFile;
-    public MFXTextField tf_UserOldPassword, tf_UserNewPassword;
-    public MFXGenericDialog faceSetupDialog;
-    public ImageView webcamPreview;
+    public MFXGenericDialog DialogConfirm_Delete, faceSetupDialog;
     public Label statusLabel;
-    public MFXButton captureButton;
-    public MFXButton saveButton;
-    public MFXButton closeFaceDialogButton;
-    @FXML
-    private Button takePhotoButton;
+    public ImageView webcamPreview;
+    public Button captureButton, saveButton, closeFaceDialogButton;
+    @FXML private Button takePhotoButton;
 
+    private File selectedImageFile;
     private final AuthRepository au = new AuthRepository();
     private final UserRepository ur = new UserRepository();
     private double xOffset = 0;
     private double yOffset = 0;
-    final int x = 1315;
-    final int y = 890;
     private Integer userId;
-    String userName, userPrenom;
-    UserRole userRole;
-
-    // face detector
-    private final FaceDetector faceDetector;
-    private final FaceRecognitionRepository faceRecognitionRepository;
+    private String userName;
     private static final int REQUIRED_PHOTOS = 20;
     private static final String FACES_DIR = "C:/Users/moeta/IdeaProjects/educonnect/faces/";
+
+    private final FaceDetector faceDetector;
+    private final FaceRecognitionRepository faceRecognitionRepository;
     private VideoCapture camera;
     private List<Mat> capturedFaces = new ArrayList<>();
     private boolean isCapturing = false;
 
     public UseraccountController() {
         URL cascadeUrl = getClass().getResource("/com/example/educonnect/educonnect/haarcascade_frontalface_default.xml");
-        if (cascadeUrl == null) {
-            throw new RuntimeException("Haar cascade file not found at /com/example/educonnect/educonnect/haarcascade_frontalface_default.xml");
-        }
+        if (cascadeUrl == null) throw new RuntimeException("Haar cascade file not found");
         String cascadePath = cascadeUrl.getPath().replaceFirst("^/", "");
-        System.out.println("Loading cascade from: " + cascadePath);
         this.faceDetector = new FaceDetector(cascadePath);
         this.faceRecognitionRepository = new FaceRecognitionRepository();
     }
 
-
-
-    private void setupButtonAnimation(MFXButton button) {
-        ScaleTransition st = new ScaleTransition(Duration.millis(200), button);
-        st.setFromX(1.0); st.setFromY(1.0);
-        st.setToX(1.05); st.setToY(1.05);
-        button.setUserData(st);
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        getUserSession();
+        if (userId == null) {
+            showAlert("Erreur : Session non trouvée. Veuillez vous connecter.");
+            return;
+        }
+        initializeCamera();
+        setupFaceRecognitionStatus();
+        initializeBindings();
+        afficherdetails();
     }
 
-    @FXML private void onButtonHoverEnter(MouseEvent e) {
-        MFXButton b = (MFXButton) e.getSource();
-        ((ScaleTransition) b.getUserData()).setRate(1.0); ((ScaleTransition) b.getUserData()).playFromStart();
+    private void getUserSession() {
+        UserSession session = ApplicationContext.getInstance().getUserSession();
+        if (session != null) {
+            userId = session.getUserId();
+            userName = session.getUserName();
+        }
     }
 
-    @FXML private void onButtonHoverExit(MouseEvent e) {
-        MFXButton b = (MFXButton) e.getSource();
-        ((ScaleTransition) b.getUserData()).setRate(-1.0); ((ScaleTransition) b.getUserData()).play();
+    private void afficherdetails() {
+        User a = ur.getUserById(userId);
+        if (a == null) {
+            System.out.println("Utilisateur non trouvé !");
+            return;
+        }
+        user_name.setText("Bienvenue, " + a.getNom());
+        if (a.getPhotoUrl() != null) {
+            try {
+                Image image = new Image(a.getPhotoUrl());
+                ImageviewUser.setImage(image);
+            } catch (Exception ex) {
+                System.out.println("Erreur image : " + ex.getMessage());
+            }
+        }
+        tf_UserAccountEmail.setText(a.getEmail());
+        tf_UserAccountNumero.setText(String.valueOf(a.getTelephone()));
     }
 
     public void updateUser(ActionEvent e) {
@@ -125,7 +126,8 @@ public class UseraccountController implements Initializable {
         afficherdetails();
     }
 
-    @FXML private void changeImage(ActionEvent e) {
+    @FXML
+    private void changeImage(ActionEvent e) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Choisir une image");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
@@ -139,127 +141,50 @@ public class UseraccountController implements Initializable {
     public void deleteUser(ActionEvent e) throws IOException {
         ur.deleteEntity(userId);
         Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(FXMLLoader.load(Main.class.getResource("views/mainLoginSignUp.fxml"))));
+        stage.setScene(new Scene(FXMLLoader.load(Main.class.getResource("views/sign-in.fxml"))));
     }
 
-    void afficherdetails() {
-        User a = ur.getUserById(userId);  // 🔁 Meilleur choix que getUserByName()
-        if (a == null) {
-            System.out.println("Utilisateur non trouvé !");
-            return;
-        }
-
-        // ✅ Mise à jour du nom dans l'interface
-        user_name.setText("Bienvenue, " + a.getNom());
-
-        // ✅ Chargement de l'image
-        if (a.getPhotoUrl() != null) {
-            try {
-                Image image = new Image(a.getPhotoUrl());
-                ImageviewUser.setImage(image);
-            } catch (Exception ex) {
-                System.out.println("Erreur de chargement d'image: " + ex.getMessage());
-            }
-        }
-
-        tf_UserAccountEmail.setText(String.valueOf(a.getEmail()));
-        tf_UserAccountNumero.setText(String.valueOf(a.getTelephone()));
+    public void afficherDeleteDialog(ActionEvent e) {
+        DialogConfirm_Delete.setOpacity(0);
+        DialogConfirm_Delete.setVisible(true);
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), DialogConfirm_Delete);
+        fadeIn.setToValue(1.0);
+        fadeIn.play();
+        general_pane.setEffect(new BoxBlur(5, 5, 3));
     }
 
-
-    private void getUserSession() {
-        UserSession session = ApplicationContext.getInstance().getUserSession();
-        if (session != null) {
-            userId = session.getUserId();
-            userName = session.getUserName();
-            userPrenom = session.getPrenom();
-            userRole = session.getRole();
-        }
+    public void closeDeleteD(ActionEvent e) {
+        DialogConfirm_Delete.setVisible(false);
+        general_pane.setEffect(null);
     }
 
-    private void showAlert(String msg) {
-        Platform.runLater(() -> new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK).showAndWait());
-    }
-    public void onLogoutButtonClick(ActionEvent actionEvent) {
+    public void onLogoutButtonClick(ActionEvent e) {
         try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Message");
             alert.setHeaderText(null);
-            alert.setContentText("Are you sure you want to logout?");
+            alert.setContentText("Êtes-vous sûr de vouloir vous déconnecter ?");
             Optional<ButtonType> option = alert.showAndWait();
             if (option.get().equals(ButtonType.OK)) {
                 Logout_Btn.getScene().getWindow().hide();
-                Parent root = FXMLLoader.load(com.example.educonnect.educonnect.Main.class.getResource("views/mainLoginSignUp.fxml"));
+                Parent root = FXMLLoader.load(Main.class.getResource("views/sign-in.fxml"));
                 Stage stage = new Stage();
-                Scene scene = new Scene(root);
-                root.setOnMousePressed((MouseEvent event) -> {
-                    xOffset = event.getSceneX();
-                    yOffset = event.getSceneY();
-                });
-                root.setOnMouseDragged((MouseEvent event) -> {
-                    stage.setX(event.getScreenX() - xOffset);
-                    stage.setY(event.getScreenY() - yOffset);
-                    stage.setOpacity(.6);
-                });
-
-                root.setOnMouseReleased((MouseEvent event) -> {
-                    stage.setOpacity(1);
-                });
+                stage.setScene(new Scene(root));
                 stage.initStyle(StageStyle.TRANSPARENT);
-                stage.setScene(scene);
                 stage.show();
-            }else return;
-
-        }catch (Exception e) {e.printStackTrace();}
-    }
-    public void ondialogueupdatebtnClick(ActionEvent actionEvent) {
-        Dialog_UpdatePassword_User.setVisible(false);
-        general_pane.setEffect(null);
-    }
-
-    public void UpdatePassword(ActionEvent actionEvent) {
-        if(actionEvent.getSource()==UpdatePassword_User)
-        {
-            if(au.validerPassword(userId,tf_UserOldPassword.getText()))
-            {
-                au.modifyPassword(userId,tf_UserNewPassword.getText());
             }
-        }
+        } catch (Exception ex) { ex.printStackTrace(); }
     }
-    public void afficherUpdate(ActionEvent actionEvent) {
-        Platform.runLater(() -> {
 
-            BoxBlur boxBlur = new BoxBlur(5, 5, 3);
-            general_pane.setEffect(boxBlur);
-
-
-            Dialog_UpdatePassword_User.setOpacity(0);
-            Dialog_UpdatePassword_User.setVisible(true);
-
-            FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), Dialog_UpdatePassword_User);
-            fadeIn.setToValue(1.0);
-            fadeIn.setOnFinished(event -> general_pane.setEffect(boxBlur)); // Apply blur after fade-in
-            fadeIn.play();
-        });
-    }
-    public void afficherDeleteDialog(ActionEvent actionEvent) {
-        DialogConfirm_Delete.setOpacity(0);
-        DialogConfirm_Delete.setVisible(true);
-        // Créer une transition de fondu pour simuler l'effet de coup d'éponge
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), DialogConfirm_Delete);
-        fadeIn.setToValue(1.0);
-        fadeIn.play();
-
-        BoxBlur boxBlur = new BoxBlur();
-        boxBlur.setWidth(5);
-        boxBlur.setHeight(5);
-        boxBlur.setIterations(3);
-        general_pane.setEffect(boxBlur);
-    }
-    public void closeDeleteD(ActionEvent actionEvent) {
+    // --- FACE RECOGNITION ---
+    private void initializeBindings() {
         DialogConfirm_Delete.setVisible(false);
-        general_pane.setEffect(null);
+        faceSetupDialog.setVisible(false);
+        captureButton.setOnAction(event -> captureFace());
+        saveButton.setOnAction(event -> saveFace());
+        closeFaceDialogButton.setOnAction(event -> closeFaceDialog());
     }
+
     private void setupFaceRecognitionStatus() {
         File userDir = new File(FACES_DIR + userId.toString());
         if (userDir.exists() && userDir.listFiles() != null && userDir.listFiles().length > 0) {
@@ -269,25 +194,38 @@ public class UseraccountController implements Initializable {
             takePhotoButton.setOnAction(event -> showFaceSetupDialog());
         }
     }
+
+    private void initializeCamera() {
+        camera = new VideoCapture(0);
+        if (!camera.isOpened()) {
+            showAlert("Cannot access webcam.");
+        }
+    }
+
+    private void releaseCamera() {
+        if (camera != null && camera.isOpened()) {
+            camera.release();
+        }
+    }
+
     @FXML
     private void showFaceSetupDialog() {
         capturedFaces.clear();
         faceSetupDialog.setVisible(true);
         startWebcamPreview();
     }
+
     @FXML
     private void captureFace() {
         if (!isCapturing) {
             isCapturing = true;
             statusLabel.setText("Capturing... (" + (capturedFaces.size() + 1) + "/" + REQUIRED_PHOTOS + ")");
-
             Mat frame = new Mat();
             if (camera.read(frame)) {
                 Mat face = faceDetector.detectAndExtractFace(frame);
                 if (face != null && !face.empty()) {
                     capturedFaces.add(face);
                     statusLabel.setText("Captured " + capturedFaces.size() + "/" + REQUIRED_PHOTOS);
-
                     if (capturedFaces.size() >= REQUIRED_PHOTOS) {
                         captureButton.setDisable(true);
                         saveButton.setDisable(false);
@@ -305,17 +243,13 @@ public class UseraccountController implements Initializable {
     private void saveFace() {
         String userDirPath = FACES_DIR + userId.toString();
         File userDir = new File(userDirPath);
-        if (!userDir.exists()) {
-            userDir.mkdirs();
-        }
-
+        if (!userDir.exists()) userDir.mkdirs();
         try {
             for (int i = 0; i < capturedFaces.size(); i++) {
                 String photoPath = userDirPath + "/photo_" + System.currentTimeMillis() + "_" + i + ".jpg";
                 opencv_imgcodecs.imwrite(photoPath, capturedFaces.get(i));
             }
-
-            Thread trainThread = new Thread(() -> {
+            new Thread(() -> {
                 faceRecognitionRepository.trainModel();
                 Platform.runLater(() -> {
                     showAlert("Face recognition setup completed successfully!");
@@ -323,12 +257,18 @@ public class UseraccountController implements Initializable {
                     takePhotoButton.setText("Face Recognition Set Up");
                     closeFaceDialog();
                 });
-            });
-            trainThread.start();
-        } catch (Exception e) {
-            showAlert("Error saving face data: " + e.getMessage());
+            }).start();
+        } catch (Exception ex) {
+            showAlert("Error saving face data: " + ex.getMessage());
         }
     }
+
+    private void stopWebcamPreview() {
+        if (camera != null && camera.isOpened()) {
+            camera.release();
+        }
+    }
+
     @FXML
     private void closeFaceDialog() {
         stopWebcamPreview();
@@ -340,117 +280,48 @@ public class UseraccountController implements Initializable {
     }
 
     private void startWebcamPreview() {
-        if (!camera.isOpened()) {
-            initializeCamera();
-        }
-
-        Thread previewThread = new Thread(() -> {
+        if (!camera.isOpened()) initializeCamera();
+        new Thread(() -> {
             while (faceSetupDialog.isVisible()) {
                 Mat frame = new Mat();
                 if (camera.read(frame)) {
-                    // Convert Mat to JavaFX Image (you'll need a utility method for this)
-                    Image fxImage = matToJavaFXImage(frame); // Implement this conversion
+                    Image fxImage = matToJavaFXImage(frame);
                     Platform.runLater(() -> webcamPreview.setImage(fxImage));
                 }
-                try {
-                    Thread.sleep(33); // ~30 FPS
-                } catch (InterruptedException e) {
-                    break;
-                }
+                try { Thread.sleep(33); } catch (InterruptedException ignored) {}
             }
-        });
-        previewThread.setDaemon(true);
-        previewThread.start();
+        }).start();
     }
-
 
     private Image matToJavaFXImage(Mat mat) {
         try {
-            // Convert Mat to BufferedImage
             Mat convertedMat = new Mat();
-
-            // If the Mat is not in BGR format, convert it
             if (mat.channels() == 1) {
                 opencv_imgproc.cvtColor(mat, convertedMat, opencv_imgproc.COLOR_GRAY2BGR);
             } else if (mat.channels() == 3) {
                 opencv_imgproc.cvtColor(mat, convertedMat, opencv_imgproc.COLOR_BGR2RGB);
             } else {
-                convertedMat = mat; // Assume it's already in correct format
+                convertedMat = mat;
             }
-
-            // Get the image data
             int width = convertedMat.cols();
             int height = convertedMat.rows();
-            byte[] data = new byte[width * height * 3]; // 3 bytes per pixel (RGB)
+            byte[] data = new byte[width * height * 3];
             convertedMat.data().get(data);
 
-            // Create BufferedImage
             BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
             byte[] targetPixels = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(data, 0, targetPixels, 0, data.length);
 
-            // Convert BufferedImage to JavaFX Image
             return SwingFXUtils.toFXImage(bufferedImage, null);
-
         } catch (Exception e) {
-            System.err.println("Error converting Mat to JavaFX Image: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Erreur conversion Mat -> Image : " + e.getMessage());
             return null;
         } finally {
-            // Clean up
-            if (mat != null && !mat.isNull()) {
-                mat.release();
-            }
+            if (mat != null && !mat.isNull()) mat.release();
         }
     }
 
-    private void stopWebcamPreview() {
-        releaseCamera();
+    private void showAlert(String msg) {
+        Platform.runLater(() -> new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK).showAndWait());
     }
-
-    private void initializeCamera() {
-        camera = new VideoCapture(0);
-        if (!camera.isOpened()) {
-            showAlert("Cannot access webcam.");
-        }
-    }
-
-    private void releaseCamera() {
-        if (camera != null && camera.isOpened()) {
-            camera.release();
-        }
-    }
-    private void initializeBindings() {
-        Dialog_UpdatePassword_User.setVisible(false);
-        DialogConfirm_Delete.setVisible(false);
-        faceSetupDialog.setVisible(false);
-
-        captureButton.setOnAction(event -> captureFace());
-        saveButton.setOnAction(event -> saveFace());
-        closeFaceDialogButton.setOnAction(event -> closeFaceDialog());
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        getUserSession();
-        if (userId == null) {
-            showAlert("Erreur : Session non trouvée. Veuillez vous connecter.");
-            return;
-        }
-
-        setupButtonAnimation(Update_AccountUser);
-        setupButtonAnimation(ConfirmerD0_AccountUser1);
-
-        initializeCamera();
-        setupFaceRecognitionStatus();
-        initializeBindings();
-        afficherdetails();
-
-        // 🔗 Actions
-        Update_AccountUser.setOnAction(this::updateUser);
-        ConfirmerD0_AccountUser1.setOnAction(e -> {
-            try { deleteUser(e); } catch (IOException ex) { ex.printStackTrace(); }
-        });
-    }
-
 }

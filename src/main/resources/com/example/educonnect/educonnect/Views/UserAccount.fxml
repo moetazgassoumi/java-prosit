@@ -1,121 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import io.github.palexdev.materialfx.dialogs.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.geometry.Pos?>
+<?import io.github.palexdev.materialfx.dialogs.MFXGenericDialog?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.educonnect.educonnect.Controllers.UseraccountController" prefHeight="800.0" prefWidth="1300.0">
-    <children>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="com.example.educonnect.educonnect.Controllers.UseraccountController"
+            stylesheets="@../Style/userAccount.css"
 
-        <!-- Sidebar -->
-        <VBox layoutX="0.0" layoutY="0.0" prefWidth="200" style="-fx-background-color: #2C3E50;" spacing="20" alignment="TOP_CENTER">
+            prefHeight="800.0" prefWidth="1300.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #f2f9ff, #d6e6ff);">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="20" alignment="TOP_CENTER" prefWidth="220" style="-fx-background-color: #2C3E50;">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="30" bottom="30" left="15" right="15"/>
             </padding>
-            <children>
-                <Button fx:id="Home_Btn" text="Accueil" prefWidth="160" styleClass="sidebar-button"/>
-                <Button fx:id="Users_Btn" text="Utilisateurs" prefWidth="160" styleClass="sidebar-button"/>
-                <Button fx:id="Reclamations_Btn" text="Réclamations" prefWidth="160" styleClass="sidebar-button"/>
-                <Button fx:id="Events_Btn" text="Événements" prefWidth="160" styleClass="sidebar-button"/>
-                <Button fx:id="Logout_Btn" text="Déconnexion" prefWidth="160" styleClass="sidebar-button" onAction="#onLogoutButtonClick"/>
-            </children>
+            <Button fx:id="Home_Btn" text="Accueil" styleClass="sidebar-button"/>
+            <Button fx:id="Users_Btn" text="Utilisateurs" styleClass="sidebar-button"/>
+            <Button fx:id="Reclamations_Btn" text="Réclamations" styleClass="sidebar-button"/>
+            <Button fx:id="Events_Btn" text="Événements" styleClass="sidebar-button"/>
+            <Button fx:id="Logout_Btn" text="Déconnexion" onAction="#onLogoutButtonClick" styleClass="sidebar-button"/>
         </VBox>
+    </left>
 
-        <!-- Main Panel -->
-        <Pane fx:id="general_pane" layoutX="200.0" layoutY="0.0" prefHeight="800" prefWidth="1100" style="-fx-background-color: #ECF0F1;">
-            <children>
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="30" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="30" left="30" right="30"/>
+            </padding>
 
-                <!-- Header -->
-                <Label fx:id="user_name" layoutX="40" layoutY="30" text="Bienvenue, User Name" style="-fx-font-size: 26px; -fx-font-weight: bold;"/>
+            <Label fx:id="user_name" text="Bienvenue, User"
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
 
-                <!-- Profile Section -->
-                <VBox layoutX="50" layoutY="100" spacing="15" prefWidth="450" alignment="TOP_LEFT">
-                    <children>
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Email :" prefWidth="100"/>
-                            <MFXTextField fx:id="tf_UserAccountEmail" prefWidth="300"/>
-                        </HBox>
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Téléphone :" prefWidth="100"/>
-                            <MFXTextField fx:id="tf_UserAccountNumero" prefWidth="300"/>
-                        </HBox>
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Photo Profil :" prefWidth="100"/>
-                            <MFXButton fx:id="ChangeImageBtn" text="Changer" onAction="#changeImage"/>
-                        </HBox>
-                        <ImageView fx:id="ImageviewUser" fitHeight="120" fitWidth="120" style="-fx-border-color: black; -fx-border-width: 1;"/>
-                        <HBox spacing="20" alignment="CENTER_LEFT">
-                            <MFXButton fx:id="Update_AccountUser" text="Mettre à jour" onAction="#updateUser" prefWidth="140"/>
-                            <MFXButton fx:id="ConfirmerD0_AccountUser1" text="Supprimer" onAction="#afficherDeleteDialog" prefWidth="140"/>
-                        </HBox>
-                    </children>
+            <HBox spacing="40" alignment="CENTER">
+
+                <!-- Profile Card -->
+                <VBox spacing="20" alignment="TOP_LEFT"
+                      style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);" prefWidth="450">
+                    <padding>
+                        <Insets top="30" left="30" right="30" bottom="30"/>
+                    </padding>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Email :" prefWidth="100"/>
+                        <TextField fx:id="tf_UserAccountEmail" prefWidth="250"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Téléphone :" prefWidth="100"/>
+                        <TextField fx:id="tf_UserAccountNumero" prefWidth="250"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Photo Profil :" prefWidth="100"/>
+                        <Button fx:id="ChangeImageBtn" text="Changer" onAction="#changeImage"/>
+                    </HBox>
+
+                    <ImageView fx:id="ImageviewUser" fitWidth="100" fitHeight="100"
+                               style="-fx-border-color: #1E90FF; -fx-border-width: 2; -fx-border-radius: 50; -fx-background-radius: 50;"/>
+
+                    <HBox spacing="20" alignment="CENTER">
+                        <Button fx:id="Update_AccountUser" text="Mettre à jour" styleClass="action-button"/>
+                        <Button fx:id="ConfirmerD0_AccountUser1" text="Supprimer compte" onAction="#afficherDeleteDialog" styleClass="action-button"/>
+                    </HBox>
                 </VBox>
 
-                <!-- Password Update Section -->
-                <VBox layoutX="600" layoutY="100" spacing="15" prefWidth="400" alignment="TOP_LEFT">
-                    <children>
-                        <Label text="Modifier le mot de passe :" style="-fx-font-size: 18px;"/>
-                        <MFXButton fx:id="UpdatePassword_User" text="Changer le mot de passe" onAction="#afficherUpdate" prefWidth="200"/>
-                    </children>
+                <!-- Face Recognition Card -->
+                <VBox spacing="20" alignment="TOP_CENTER"
+                      style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);" prefWidth="300">
+                    <padding>
+                        <Insets top="30" left="30" right="30" bottom="30"/>
+                    </padding>
+
+                    <Label text="Reconnaissance faciale"
+                           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <Button fx:id="takePhotoButton" text="Configurer" styleClass="face-recognition-button"/>
                 </VBox>
 
-                <!-- Face Recognition Section -->
-                <VBox layoutX="600" layoutY="250" spacing="15" prefWidth="400" alignment="TOP_LEFT">
-                    <children>
-                        <Label text="Reconnaissance faciale :" style="-fx-font-size: 18px;"/>
-                        <Button fx:id="takePhotoButton" text="Configurer la reconnaissance faciale" prefWidth="250"/>
-                    </children>
+            </HBox>
+
+        </VBox>
+    </center>
+
+    <!-- Dialog Confirm Delete -->
+    <children>
+        <MFXGenericDialog fx:id="DialogConfirm_Delete" visible="false" layoutX="400" layoutY="300" prefWidth="400"
+                          style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+            <content>
+                <VBox spacing="20" alignment="CENTER">
+                    <Label text="Voulez-vous vraiment supprimer votre compte ?" style="-fx-font-size: 16px; -fx-text-fill: #2C3E50;"/>
+                    <HBox spacing="20" alignment="CENTER">
+                        <Button text="Annuler" onAction="#closeDeleteD" styleClass="action-button"/>
+                        <Button text="Confirmer" onAction="#deleteUser" styleClass="action-button"/>
+                    </HBox>
                 </VBox>
+            </content>
+        </MFXGenericDialog>
 
-                <!-- Dialog Confirm Delete -->
-                <MFXGenericDialog fx:id="DialogConfirm_Delete" visible="false" layoutX="300" layoutY="500" prefWidth="500">
-                    <content>
-                        <VBox spacing="10" alignment="CENTER">
-                            <Label text="Voulez-vous vraiment supprimer ce compte ?" style="-fx-font-size: 16px;"/>
-                            <HBox spacing="20" alignment="CENTER">
-                                <MFXButton fx:id="AnnulerDelete1_User" text="Annuler" onAction="#closeDeleteD" prefWidth="100"/>
-                                <MFXButton fx:id="ConfirmDelete1_User" text="Confirmer" onAction="#deleteUser" prefWidth="100"/>
-                            </HBox>
-                        </VBox>
-                    </content>
-                </MFXGenericDialog>
-
-                <!-- Dialog Update Password -->
-                <MFXGenericDialog fx:id="Dialog_UpdatePassword_User" visible="false" layoutX="300" layoutY="500" prefWidth="500">
-                    <content>
-                        <VBox spacing="10" alignment="CENTER">
-                            <MFXTextField fx:id="tf_UserOldPassword" promptText="Ancien mot de passe"/>
-                            <MFXTextField fx:id="tf_UserNewPassword" promptText="Nouveau mot de passe"/>
-                            <HBox spacing="20" alignment="CENTER">
-                                <MFXButton fx:id="AnnulerUpdateP_User" text="Annuler" onAction="#ondialogueupdatebtnClick" prefWidth="100"/>
-                                <MFXButton fx:id="UpdatePassword_ConfirmDialog" text="Confirmer" onAction="#UpdatePassword" prefWidth="100"/>
-                            </HBox>
-                        </VBox>
-                    </content>
-                </MFXGenericDialog>
-
-                <!-- Face Setup Dialog -->
-                <MFXGenericDialog fx:id="faceSetupDialog" visible="false" layoutX="200" layoutY="100" prefWidth="700" prefHeight="500">
-                    <content>
-                        <VBox spacing="15" alignment="CENTER">
-                            <Label text="Capture du Visage" style="-fx-font-size: 20px;"/>
-                            <ImageView fx:id="webcamPreview" fitWidth="500" fitHeight="300"/>
-                            <Label fx:id="statusLabel" text="Positionnez votre visage" style="-fx-font-size: 16px;"/>
-                            <HBox spacing="20" alignment="CENTER">
-                                <MFXButton fx:id="captureButton" text="Capturer"/>
-                                <MFXButton fx:id="saveButton" text="Sauvegarder" disable="true"/>
-                                <MFXButton fx:id="closeFaceDialogButton" text="Fermer"/>
-                            </HBox>
-                        </VBox>
-                    </content>
-                </MFXGenericDialog>
-
-            </children>
-        </Pane>
-
+        <!-- Dialog Face Setup -->
+        <MFXGenericDialog fx:id="faceSetupDialog" visible="false" layoutX="300" layoutY="100" prefWidth="700" prefHeight="500"
+                          style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+            <content>
+                <VBox spacing="20" alignment="CENTER">
+                    <Label text="Capture du Visage" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                    <ImageView fx:id="webcamPreview" fitWidth="500" fitHeight="300"/>
+                    <Label fx:id="statusLabel" text="Positionnez votre visage" style="-fx-font-size: 14px;"/>
+                    <HBox spacing="20" alignment="CENTER">
+                        <Button fx:id="captureButton" text="Capturer"/>
+                        <Button fx:id="saveButton" text="Sauvegarder" disable="true"/>
+                        <Button fx:id="closeFaceDialogButton" text="Fermer"/>
+                    </HBox>
+                </VBox>
+            </content>
+        </MFXGenericDialog>
     </children>
-</AnchorPane>
+
+</BorderPane>

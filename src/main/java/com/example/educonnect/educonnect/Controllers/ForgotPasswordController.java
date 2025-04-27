@@ -66,11 +66,11 @@ public class ForgotPasswordController implements Initializable {
                 Verif_Dialog.setVisible(true);
             } else {
                 showError("Email Sending Failed", "Failed to send verification code. Please check your internet connection or email settings and try again.");
-                Navigate.navigate(SendCodeBtn, "views/mainLoginSignUp.fxml", (Stage) SendCodeBtn.getScene().getWindow());
+                Navigate.navigate(SendCodeBtn, "views/sign-in.fxml", (Stage) SendCodeBtn.getScene().getWindow());
             }
         } else {
             showError("Email Not Found", "L'email n'existe pas !");
-            Navigate.navigate(SendCodeBtn, "views/mainLoginSignUp.fxml", (Stage) SendCodeBtn.getScene().getWindow());
+            Navigate.navigate(SendCodeBtn, "views/sign-in.fxml", (Stage) SendCodeBtn.getScene().getWindow());
         }
     }
 
@@ -92,14 +92,14 @@ public class ForgotPasswordController implements Initializable {
     public void modifierpass() throws IOException {
         au.modifyPassword(userId, tf_passwordUpdate.getText());
         Stage window = (Stage) savePassword.getScene().getWindow();
-        Navigate.navigate(savePassword, "views/mainLoginSignUp.fxml", window);
+        Navigate.navigate(savePassword, "views/sign-in.fxml", window);
         general_pane.setEffect(null);
     }
 
     @FXML
     public void goBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/educonnect/educonnect/Views/mainLoginSignUp.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/educonnect/educonnect/Views/sign-in.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));

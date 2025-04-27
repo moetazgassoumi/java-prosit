@@ -2,6 +2,7 @@ package com.example.educonnect.educonnect.Controllers;
 
 import com.example.educonnect.educonnect.Entities.User;
 import com.example.educonnect.educonnect.Entities.UserSession;
+import com.example.educonnect.educonnect.Main;
 import com.example.educonnect.educonnect.Repository.AuthRepository;
 import com.example.educonnect.educonnect.Repository.UserRepository;
 import com.example.educonnect.educonnect.Repository.FaceRecognitionRepository;
@@ -14,8 +15,11 @@ import com.example.educonnect.educonnect.Entities.ApplicationContext;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -46,6 +50,8 @@ public class LoginController implements Initializable {
     private final FaceDetector faceDetector;
     private final FaceRecognitionRepository faceRecognitionRepository;
     private VideoCapture camera;
+    @FXML
+    private Hyperlink createAccountLink;
 
     private final AuthRepository ar = new AuthRepository();
     private final UserRepository ur = new UserRepository();
@@ -251,5 +257,15 @@ public class LoginController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
             alert.showAndWait();
         });
+    }
+
+    @FXML
+    private void onSignupLinkClick(javafx.scene.input.MouseEvent event) {
+        try {
+            Parent root = FXMLLoader.load(Main.class.getResource("views/sign-up.fxml"));
+            ck_emailField.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

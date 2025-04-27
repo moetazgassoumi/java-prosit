@@ -1,51 +1,70 @@
-/* 🌌 Image de fond pour toute la scène */
+/* 🌌 Fond général avec flou doux */
 .background-pane {
     -fx-background-image: url("../assets/63f566eeb91c2d424a6627671b9b911f.jpg");
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* 🧾 Style des champs */
+/* 🧾 Style des TextFields */
 .custom-textfield {
-    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-color: rgba(255, 255, 255, 0.95);
     -fx-border-color: #1E90FF;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-padding: 10;
-    -fx-font-size: 13px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 10 15;
+    -fx-font-size: 14px;
     -fx-prompt-text-fill: #999999;
     -fx-text-fill: #2c3e50;
-    -fx-min-width: 300;
+    -fx-min-width: 320px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0.3, 0, 2);
 }
 
+/* ✨ Focus amélioré */
 .custom-textfield:focused {
     -fx-border-color: #4682B4;
+    -fx-effect: dropshadow(gaussian, rgba(70,130,180,0.3), 10, 0.4, 0, 3);
 }
 
+/* 🚀 Style du bouton principal */
 .custom-button {
-    -fx-background-color: #1E90FF;
+    -fx-background-color: linear-gradient(to right, #1E90FF, #4682B4);
     -fx-text-fill: white;
-    -fx-font-size: 15px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-background-radius: 20;
-    -fx-padding: 10 40 10 40;
+    -fx-background-radius: 25px;
+    -fx-padding: 10 50;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 6, 0, 0, 2);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0.3, 0, 4);
+    -fx-transition: all 0.3s ease-in-out;
 }
 
+/* 🎯 Hover sur bouton */
 .custom-button:hover {
-    -fx-background-color: #4682B4;
+    -fx-background-color: linear-gradient(to right, #4682B4, #1E90FF);
 }
 
+/* 🏷️ Titre principal */
 .header-label {
-    -fx-font-size: 30px;
+    -fx-font-size: 36px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 6, 0.3, 0, 2);
 }
 
+/* 🛑 Message d'erreur */
 .error-message {
     -fx-text-fill: red;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-wrap-text: true;
+}
+
+/* 🧩 Card signup */
+.card {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-radius: 20px;
+    -fx-padding: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0.3, 0, 5);
 }

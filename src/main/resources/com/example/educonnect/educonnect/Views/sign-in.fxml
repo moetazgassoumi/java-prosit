@@ -13,21 +13,24 @@
            stylesheets="@../Style/login.css"
            style="-fx-background-color: linear-gradient(to bottom right, #f2f9ff, #d6e6ff);">
 
-    <VBox alignment="CENTER" spacing="20" maxWidth="400" StackPane.alignment="CENTER">
+    <!-- Card principale -->
+    <VBox alignment="CENTER" spacing="20" maxWidth="450" StackPane.alignment="CENTER" styleClass="card">
+
         <Label text="EduConnect" styleClass="header-label"/>
 
         <Label text="Connexion" textFill="#1E90FF">
             <font><Font size="20"/></font>
         </Label>
 
-        <!-- 🌤️ MÉTÉO -->
-        <VBox alignment="CENTER" spacing="5" style="-fx-text-fill: #1E90FF;">
+        <!-- 🌤️ Météo -->
+        <VBox alignment="CENTER" spacing="5">
             <Label fx:id="weatherLabel" text="Chargement météo..."
                    wrapText="true"
-                   style="-fx-font-size: 13px; -fx-text-fill: #1E90FF;" maxWidth="350"/>
+                   styleClass="weather-text"
+                   maxWidth="350"/>
         </VBox>
 
-        <!-- 📝 CITATION -->
+        <!-- 📝 Citation -->
         <VBox spacing="4" alignment="CENTER">
             <Label fx:id="quoteLabel"
                    wrapText="true"
@@ -39,8 +42,9 @@
                    styleClass="quote-author" />
         </VBox>
 
-        <!-- 📝 Formulaire de Connexion -->
+        <!-- Formulaire -->
         <VBox spacing="15" alignment="CENTER">
+
             <!-- Email -->
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <FontAwesomeIconView glyphName="USER" size="18" fill="#1E90FF"/>
@@ -57,16 +61,24 @@
         <!-- Bouton Connexion -->
         <Button fx:id="signIn_btn" text="Se connecter" styleClass="login-button"/>
 
-        <!-- 🌟 Bouton Reconnaissance Faciale -->
+        <!-- Bouton Reconnaissance Faciale -->
         <Button fx:id="recognizeButton" text="Se connecter avec reconnaissance faciale"
                 styleClass="face-recognition-button" />
 
-        <!-- Mot de passe oublié -->
-        <Hyperlink fx:id="forgot_password" text="Mot de passe oublié ?"
-                   onMouseClicked="#onForgotPasswordClick" styleClass="forgot-link"/>
+        <!-- Liens utiles -->
+        <VBox alignment="CENTER" spacing="5">
+            <!-- Mot de passe oublié -->
+            <Hyperlink fx:id="forgot_password" text="Mot de passe oublié ?"
+                       onMouseClicked="#onForgotPasswordClick" styleClass="forgot-link"/>
+
+            <!-- Créer un compte (nouveau lien ajouté !) -->
+            <Hyperlink text="Créer un compte"
+                       onMouseClicked="#onSignupLinkClick" styleClass="signup-link"/>
+        </VBox>
+
     </VBox>
 
-    <!-- ⏳ Overlay de Chargement pour la reconnaissance faciale -->
+    <!-- ⏳ Overlay de chargement -->
     <Pane fx:id="overlay" visible="false" managed="false"
           style="-fx-background-color: rgba(0,0,0,0.5);"
           StackPane.alignment="CENTER">

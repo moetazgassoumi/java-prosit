@@ -1,0 +1,68 @@
+/* --------- Général --------- */
+.root {
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+/* --------- Sidebar (Menu à gauche) --------- */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-pref-height: 50;
+    -fx-cursor: hand;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #1E90FF;
+    -fx-background-radius: 10;
+}
+
+/* --------- Boutons d'Action (Mettre à jour / Supprimer compte) --------- */
+.action-button {
+    -fx-background-color: #1E90FF;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 140;
+    -fx-pref-height: 40;
+}
+
+.action-button:hover {
+    -fx-background-color: #0f71cc;
+}
+
+/* --------- Bouton Reconnaissance Faciale --------- */
+.face-recognition-button {
+    -fx-background-color: #00BFFF;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+    -fx-pref-height: 40;
+}
+
+.face-recognition-button:hover {
+    -fx-background-color: #009ACD;
+}
+
+/* --------- TextFields --------- */
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-color: #d6e6ff;
+    -fx-border-radius: 8;
+    -fx-font-size: 14px;
+    -fx-padding: 8 12 8 12;
+}
+
+/* --------- Labels généraux --------- */
+.label {
+    -fx-text-fill: #2C3E50;
+}

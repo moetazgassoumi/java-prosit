@@ -9,6 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -143,12 +144,15 @@ public class SignupController {
 
         try {
             userRepository.addEntity(user);
-            nomErrorLabel.setText("Inscription réussie !");
-            clearForm();
-        } catch (DatabaseException e) {
+            // ✅ Après inscription réussie ➔ rediriger vers Login.fxml
+            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(com.example.educonnect.educonnect.Main.class.getResource("views/sign-in.fxml"));
+            nomField.getScene().setRoot(root);
+
+        } catch (DatabaseException | IOException e) {
             nomErrorLabel.setText("Erreur lors de l'inscription : " + e.getMessage());
         }
     }
+
 
     private boolean isInputValid() {
         boolean valid = true;
@@ -196,5 +200,14 @@ public class SignupController {
         salaireField.clear();
         photoField.clear();
         telephoneField.clear();
+    }
+    @FXML
+    private void onLoginLinkClick(javafx.scene.input.MouseEvent event) {
+        try {
+            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(com.example.educonnect.educonnect.Main.class.getResource("views/sign-in.fxml"));
+            nomField.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
