@@ -15,6 +15,7 @@ module com.example.educonnect.educonnect {
     requires kernel;
     requires layout;
     requires org.json;
+    requires org.bytedeco.opencv;
 
     opens com.example.educonnect.educonnect.Entities to javafx.fxml;
     exports com.example.educonnect.educonnect.Entities;
